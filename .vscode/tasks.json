@@ -1,0 +1,12 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run the app",
+      "type": "shell",
+      "command": "${workspaceFolder}/.venv/bin/uvicorn",
+      "args": ["src.main:app", "--reload"],
+      "problemMatcher": []
+    }
+  ]
+}
