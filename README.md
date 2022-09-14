@@ -15,12 +15,11 @@ source ./.venv/bin/activate && \ # Activate the virtual environment
 pip3 install -r requirements.txt # Install dependencies — see `./requirements.txt` for more info
 ```
 
-Updating dependencies:
+### Updating dependencies
 
-```sh
+```bash
 pip freeze > requirements.txt
 ```
-
 
 ### Running
 
