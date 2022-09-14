@@ -19,6 +19,7 @@ Updating dependencies:
 
 ```sh
 pip freeze > requirements.txt
+```
 
 
 ### Running
