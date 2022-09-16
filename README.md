@@ -10,11 +10,11 @@
 ### Set-up
 
 ```bash
-python3 -m venv .venv && \         # Create a virtual environment in `./.venv`
-source ./.venv/bin/activate && \   # Activate the virtual environment
-pip3 install -r requirements.txt \ # Install dependencies — see `./requirements.txt` for more info
-pre-commit install \               # Install the pre-commit hook
-pre-commit autoupdate              # Update the pre-commit hooks
+python3 -m venv .venv && \            # Create a virtual environment in `./.venv`
+source ./.venv/bin/activate && \      # Activate the virtual environment
+pip3 install -r requirements.txt && \ # Install dependencies — see `./requirements.txt` for more info
+pre-commit install && \               # Install the pre-commit hook
+pre-commit autoupdate                 # Update the pre-commit hooks
 ```
 
 ### Updating dependencies
