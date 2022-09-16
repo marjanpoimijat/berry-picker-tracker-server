@@ -25,7 +25,11 @@ pip freeze > requirements.txt
 
 ### Running
 
-Either run `uvicorn --app-dir=src main:app --reload` manually or start the "Run the app" task in VSCode
+Either run 
+```
+uvicorn --app-dir=src main:app --reload 
+```
+manually or start the "Run the app" task in VSCode
 
 ### Testing
 
