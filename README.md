@@ -26,3 +26,16 @@ pip freeze > requirements.txt
 ### Running
 
 Either run `uvicorn --app-dir=src main:app --reload` manually or start the "Run the app" task in VSCode
+
+### Testing
+
+Run tests
+
+```
+pytest
+```
+If you stumble upon "ModuleNotFoundError", run
+
+```
+python3 -m pytest
+```
