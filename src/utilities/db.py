@@ -2,7 +2,7 @@ from enum import unique
 from sqlalchemy.sql import func
 from sqlalchemy import DateTime
 from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Float, ForeignKey
-import sqlalchemy
+
 
 
 class Database:
