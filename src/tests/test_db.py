@@ -64,5 +64,5 @@ class TestDatabase(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls) -> None:
-        os.remove("test.db")        
+        os.remove(database_uri[10:])        
 
