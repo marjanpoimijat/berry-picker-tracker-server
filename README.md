@@ -20,26 +20,27 @@ pre-commit autoupdate                 # Update the pre-commit hooks
 ### Updating dependencies
 
 ```bash
-pip freeze > requirements.txt
+pip3 freeze > requirements.txt
 ```
 
 ### Running
 
-Either run 
+Either start the "Run the app" task in VSCode or run
+
+```bash
+uvicorn --app-dir=src main:app --reload
 ```
-uvicorn --app-dir=src main:app --reload 
-```
-manually or start the "Run the app" task in VSCode
 
 ### Testing
 
 Run tests
 
-```
+```bash
 pytest
 ```
-If you stumble upon "ModuleNotFoundError", run
 
-```
+If you stumble upon `ModuleNotFoundError`, run
+
+```bash
 python3 -m pytest
 ```
