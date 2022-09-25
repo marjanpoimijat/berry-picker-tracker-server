@@ -4,25 +4,22 @@ from pydantic import BaseModel
 
 # This file is basically just for data validation
 
-"""Common attributes for Coordinate objects"""
-
 
 class CoordinateBase(BaseModel):
+    """Common attributes for Coordinate objects"""
+
     latitude: float
     longitude: float
 
 
-"""Creating coordinates does not need additional data"""
-
-
 class CoordinateCreate(CoordinateBase):
+    # Creating coordinates does not need additional data
     pass
 
 
-"""Attributes (addition to CoordinateBase) that are seen when reading data"""
-
-
 class Coordinate(CoordinateBase):
+    """Attributes (addition to CoordinateBase) that are seen when reading data"""
+
     id: int
     user_id: int
     ts: datetime
@@ -32,24 +29,21 @@ class Coordinate(CoordinateBase):
         arbitrary_types_allowed = True
 
 
-"""Common attributes for User objects"""
-
-
 class UserBase(BaseModel):
+    """Common attributes for User objects"""
+
     username: str
 
 
-"""Attributes that are needed for creating but not for reading data"""
-
-
 class UserCreate(UserBase):
+    """Attributes that are needed for creating but not for reading data"""
+
     password: str
 
 
-"""Attributes (addition to UserBase and UserCreate) that are seen when reading data"""
-
-
 class User(UserBase):
+    """Attributes (addition to UserBase and UserCreate) that are seen when reading data"""
+
     id: int
     coordinates: List[Coordinate] = []
 
