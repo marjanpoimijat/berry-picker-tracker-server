@@ -1,6 +1,8 @@
-from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime
+from sqlalchemy import Column, String, Integer, Boolean, Float, ForeignKey, DateTime
+from sqlalchemy.schema import PrimaryKeyConstraint
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
+
 
 from .db import Base
 
@@ -10,20 +12,40 @@ from .db import Base
 class User(Base):
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True)
-    username = Column(String, unique=True, nullable=False)
-    password = Column("password", String, nullable=False)
+    id = Column(String, primary_key=True, unique=True, nullable=False)
 
-    coordinates = relationship("Coordinate", back_populates="user")
+    routes = relationship(
+        "Route", back_populates="user", cascade="all, delete", passive_deletes=True
+    )
+
+
+class Route(Base):
+    __tablename__ = "routes"
+
+    id = Column(String, primary_key=True, unique=True)
+    user_id = Column(String, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    active = Column(Boolean, nullable=False)
+
+    user = relationship("User", back_populates="routes")
+    coordinates = relationship(
+        "Coordinate",
+        back_populates="route",
+        cascade="all, delete",
+        passive_deletes=True,
+    )
 
 
 class Coordinate(Base):
     __tablename__ = "coordinates"
 
-    id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey("users.id"))
+    route_id = Column(
+        String, ForeignKey("routes.id", ondelete="CASCADE"), nullable=False
+    )
     latitude = Column(Float, nullable=False)
     longitude = Column(Float, nullable=False)
+    mnc = Column(Integer)
     ts = Column(DateTime(timezone=True), server_default=func.now())
 
-    user = relationship("User", back_populates="coordinates")
+    __table_args__ = (PrimaryKeyConstraint(route_id, ts), {})
+
+    route = relationship("Route", back_populates="coordinates")
