@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import List, Union
 from pydantic import BaseModel, Field
-from uuid import UUID, uuid4
+from uuid import uuid4
 
 
 # This file is basically just for data validation
