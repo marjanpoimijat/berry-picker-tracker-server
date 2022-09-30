@@ -29,6 +29,7 @@ class CoordinateCreate(CoordinateBase):
 class Coordinate(CoordinateBase):
     """Attributes (addition to CoordinateBase) that are seen when reading data"""
 
+    id: int
     ts: datetime
 
     class Config:
@@ -41,7 +42,7 @@ class RouteBase(BaseModel):
 
     id: str = Field(default_factory=get_uuid)
     user_id: str
-    active: bool = Field(default_factory=True)
+    active: bool = True
 
 
 class RouteCreate(RouteBase):

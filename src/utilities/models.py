@@ -22,9 +22,9 @@ class User(Base):
 class Route(Base):
     __tablename__ = "routes"
 
-    id = Column(String, primary_key=True, unique=True)
+    id = Column(String, primary_key=True, unique=True, nullable=False)
     user_id = Column(String, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
-    active = Column(Boolean, nullable=False)
+    active = Column(Boolean)
 
     user = relationship("User", back_populates="routes")
     coordinates = relationship(
@@ -38,6 +38,7 @@ class Route(Base):
 class Coordinate(Base):
     __tablename__ = "coordinates"
 
+    id = Column(Integer, primary_key=True)
     route_id = Column(
         String, ForeignKey("routes.id", ondelete="CASCADE"), nullable=False
     )
@@ -46,6 +47,6 @@ class Coordinate(Base):
     mnc = Column(Integer)
     ts = Column(DateTime(timezone=True), server_default=func.now())
 
-    __table_args__ = (PrimaryKeyConstraint(route_id, ts), {})
+    # __table_args__ = (PrimaryKeyConstraint(route_id, ts), {})
 
     route = relationship("Route", back_populates="coordinates")

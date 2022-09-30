@@ -35,6 +35,14 @@ def create_new_waypoint(coordinate: schemas.CoordinateCreate, db: Session):
     return db_waypoint
 
 
+def get_user_by_id(user_id: str, db: Session):
+    return db.query(models.User).filter(models.User.id == user_id).all()
+
+
+def get_route_by_id(route_id: str, db: Session):
+    return db.query(models.Route).filter(models.Route.id == route_id).all()
+
+
 def get_users_routes(user_id: str, db: Session):
     """Get users routes"""
     return db.query(models.Route).filter(models.Route.user_id == user_id).all()
@@ -50,7 +58,7 @@ def get_routes_waypoints(route_id: str, db: Session):
 def deactivate_route(route_id: str, db: Session):
     """Changes routes 'active' column to false"""
     try:
-        to_update = _get_route_by_id(route_id, db)[0]
+        to_update = get_route_by_id(route_id, db)[0]
         to_update.active = False
 
         db.commit()
@@ -63,15 +71,14 @@ def deactivate_route(route_id: str, db: Session):
 
 def delete_user(user_id: str, db: Session):
     """Delete user"""
-    return db.query(models.User).filter(models.User.id == user_id).delete()
+    db.query(models.User).filter(models.User.id == user_id).delete()
+    db.commit()
 
 
 def delete_route(route_id: str, db: Session):
-    return db.query(models.Route).filter(models.Route.id == route_id).delete()
-
-
-def _get_route_by_id(route_id: str, db: Session):
-    return db.query(models.Route).filter(models.Route.id == route_id).all()
+    """Delete route"""
+    db.query(models.Route).filter(models.Route.id == route_id).delete()
+    db.commit()
 
 
 def _create(db_object, db: Session):

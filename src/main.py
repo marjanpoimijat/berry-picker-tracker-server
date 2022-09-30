@@ -49,6 +49,18 @@ def create_new_waypoint(
     return crud.create_new_waypoint(coordinate, db)
 
 
+@app.get("/get-user/")
+def get_user(user_id: str = Header(), db: Session = Depends(get_db)):
+    """Get user by user_id, provides user_id via custom header"""
+    return crud.get_user_by_id(user_id, db)
+
+
+@app.get("/get-route/")
+def get_route(route_id: str = Header(), db: Session = Depends(get_db)):
+    """Get user by route_id, provides route_id via custom header"""
+    return crud.get_route_by_id(route_id, db)
+
+
 @app.get("/get-user-routes/")
 def get_users_route(user_id: str = Header(), db: Session = Depends(get_db)):
     """Get users route by user_id, provides user_id via custom header"""

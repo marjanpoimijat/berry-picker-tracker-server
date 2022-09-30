@@ -1,3 +1,4 @@
+import json
 import time
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
@@ -45,101 +46,215 @@ def test_connection_works():
     assert res.status_code == 200
 
 
-def test_create_and_get_users():
-    res1 = client.post(
-        "/users/",
-        json={"username": "test_user1", "password": "test_password1"},
+def test_create_and_get_users_with_generated_id():
+    res1 = client.post("/new-user/", json={})
+    res2 = client.post("/new-user/", json={})
+
+    assert res1.status_code == 200
+    assert res2.status_code == 200
+
+    res1_id = res1.json()["id"]
+    res2_id = res2.json()["id"]
+
+    res1 = client.get("/get-user/", headers={"user-id": res1_id})
+    res2 = client.get("/get-user/", headers={"user-id": res2_id})
+
+    assert res1.status_code == 200
+    assert res2.status_code == 200
+
+    assert res1.json()[0]["id"] == res1_id
+    assert res2.json()[0]["id"] == res2_id
+
+
+def test_create_and_get_users_with_given_id():
+    res1_post = client.post(
+        "/new-user/", json={"id": "12345678-abcd-1234-efgh-123456789000"}
     )
-    res2 = client.post(
-        "/users/", json={"username": "test_user2", "password": "test_password2"}
+    res2_post = client.post(
+        "/new-user/", json={"id": "87654321-dcba-4321-hgfe-000987654321"}
     )
 
-    json_data1 = res1.json()
-    json_data2 = res2.json()
+    assert res1_post.status_code == 200
+    assert res2_post.status_code == 200
 
-    user_id1 = json_data1["id"]
-    user_id2 = json_data2["id"]
+    res1_post_id = res1_post.json()["id"]
+    res2_post_id = res2_post.json()["id"]
 
-    assert res1.status_code == 200
-    assert json_data1["username"] == "test_user1"
+    res1_get = client.get("/get-user/", headers={"user-id": res1_post_id})
+    res2_get = client.get("/get-user/", headers={"user-id": res2_post_id})
 
-    assert res2.status_code == 200
-    assert json_data2["username"] == "test_user2"
+    assert res1_get.status_code == 200
+    assert res2_get.status_code == 200
 
-    res1 = client.get(f"/get_user/{user_id1}")
-    res2 = client.get(f"/get_user/{user_id2}")
-
-    assert res1.status_code == 200
-    assert res2.status_code == 200
-
-    json_data1 = res1.json()
-    json_data2 = res2.json()
-
-    assert json_data1["username"] == "test_user1"
-    assert json_data2["username"] == "test_user2"
+    assert res1_get.json()[0]["id"] == res1_post_id
+    assert res2_get.json()[0]["id"] == res2_post_id
 
 
-def test_create_coordinates_for_users():
-    res = client.post("/coordinates/1", json={"latitude": 1.1, "longitude": 1.1})
-    json_data = res.json()
+def test_create_route_for_user_with_generated_id_and_get_user():
+    res_post = client.post(
+        "/start-route/", json={"user_id": "12345678-abcd-1234-efgh-123456789000"}
+    )
 
-    assert res.status_code == 200
-    assert json_data["latitude"] == 1.1
-    assert json_data["longitude"] == 1.1
+    assert res_post.status_code == 200
+
+    route_id = res_post.json()["id"]
+    res_get = client.get("/get-route/", headers={"route-id": route_id})
+
+    assert res_get.status_code == 200
+    assert res_get.json()[0]["id"] == route_id
+
+
+def test_create_route_for_user_with_given_id_and_get_route():
+    res_post = client.post(
+        "/start-route/",
+        json={
+            "user_id": "12345678-abcd-1234-efgh-123456789000",
+            "id": "1111111-abcd-1111-efgh-111111111111",
+        },
+    )
+
+    assert res_post.status_code == 200
+
+    route_id = res_post.json()["id"]
+    res_get = client.get("/get-route/", headers={"route-id": route_id})
+
+    assert res_get.status_code == 200
+    assert res_get.json()[0]["id"] == route_id
+
+
+def test_get_users_routes():
+    res_get = client.get(
+        "/get-user-routes", headers={"user-id": "12345678-abcd-1234-efgh-123456789000"}
+    )
+
+    assert res_get.status_code == 200
+    assert len(res_get.json()) == 2
+
+
+def test_deactivate_route():
+    res_patch = client.patch(
+        "/deactivate-route/",
+        headers={"route-id": "1111111-abcd-1111-efgh-111111111111"},
+    )
+
+    assert res_patch.status_code == 200
+
+    route_id = res_patch.json()["id"]
+
+    res_get = client.get("/get-route/", headers={"route-id": route_id})
+
+    assert res_get.status_code == 200
+    assert res_get.json()[0]["active"] == False
+
+
+def test_create_waypoints_to_route_and_get_routes_waypoints():
+    res_post_route = client.post(
+        "/start-route/",
+        json={
+            "user_id": "12345678-abcd-1234-efgh-123456789000",
+            "id": "22222222-2a2a-2222-2b2b-222222222222",
+        },
+    )
+
+    assert res_post_route.status_code == 200
+
+    route_id = res_post_route.json()["id"]
+
+    res_post_coord = client.post(
+        "/create-waypoint/",
+        json={"route_id": route_id, "latitude": 1.0, "longitude": 1.0, "mnc": 200},
+    )
+    assert res_post_coord.status_code == 200
+    assert res_post_coord.json()["latitude"] == 1.0
+    assert res_post_coord.json()["longitude"] == 1.0
 
     time.sleep(1)
 
-    res = client.post("/coordinates/1", json={"latitude": 2.2, "longitude": 2.2})
-
-    json_data = res.json()
-
-    assert res.status_code == 200
-    assert json_data["latitude"] == 2.2
-    assert json_data["longitude"] == 2.2
-
-    time.sleep(1)
-
-    res = client.post("/coordinates/1", json={"latitude": 3.3, "longitude": 3.3})
-
-    json_data = res.json()
-
-    assert res.status_code == 200
-    assert json_data["latitude"] == 3.3
-    assert json_data["longitude"] == 3.3
+    res_post_coord = client.post(
+        "/create-waypoint/",
+        json={"route_id": route_id, "latitude": 1.1, "longitude": 1.1, "mnc": 200},
+    )
+    assert res_post_coord.status_code == 200
+    assert res_post_coord.json()["latitude"] == 1.1
+    assert res_post_coord.json()["longitude"] == 1.1
 
     time.sleep(1)
 
-    res = client.post("/coordinates/2", json={"latitude": 1.1, "longitude": 1.1})
+    res_post_coord = client.post(
+        "/create-waypoint/",
+        json={"route_id": route_id, "latitude": 1.2, "longitude": 1.2, "mnc": 200},
+    )
+    assert res_post_coord.status_code == 200
+    assert res_post_coord.json()["latitude"] == 1.2
+    assert res_post_coord.json()["longitude"] == 1.2
 
-    json_data = res.json()
+    time.sleep(1)
 
-    assert res.status_code == 200
-    assert json_data["latitude"] == 1.1
-    assert json_data["longitude"] == 1.1
+    res_post_coord = client.post(
+        "/create-waypoint/",
+        json={"route_id": route_id, "latitude": 1.3, "longitude": 1.3, "mnc": 200},
+    )
+    assert res_post_coord.status_code == 200
+    assert res_post_coord.json()["latitude"] == 1.3
+    assert res_post_coord.json()["longitude"] == 1.3
 
+    res_get_route_waypoints = client.get(
+        "/get-route-waypoints/", headers={"route-id": route_id}
+    )
 
-def test_get_coordinates_of_user():
-    res1 = client.get("/get_user/1")
-    json_data1 = res1.json()
-
-    assert res1.status_code == 200
-    assert len(json_data1["coordinates"]) == 3
-
-    res2 = client.get("/get_user/2")
-    json_data = res2.json()
-
-    assert res2.status_code == 200
-    assert len(json_data["coordinates"]) == 1
+    assert len(res_get_route_waypoints.json()) == 4
 
 
-def test_get_users_latest_coordinate():
-    res = client.get("/get_user/1")
-    json_data = res.json()
+def test_get_routes_first_and_latest_waypoint():
+    route_id = "22222222-2a2a-2222-2b2b-222222222222"
+    res_get_route_waypoints = client.get(
+        "/get-route-waypoints/", headers={"route-id": route_id}
+    )
 
-    coordinates = json_data["coordinates"]
+    assert res_get_route_waypoints.status_code == 200
 
-    assert res.status_code == 200
-    assert coordinates[0]["ts"] < coordinates[1]["ts"] < coordinates[2]["ts"]
+    coordinates = res_get_route_waypoints.json()
+
+    assert (
+        coordinates[0]["ts"]
+        < coordinates[1]["ts"]
+        < coordinates[2]["ts"]
+        < coordinates[3]["ts"]
+    )
+
+
+def test_delete_route():
+    route_id = "22222222-2a2a-2222-2b2b-222222222222"
+    res_get_route = client.get("/get-route/", headers={"route-id": route_id})
+
+    assert res_get_route.status_code == 200
+    assert len(res_get_route.json()) == 1
+
+    res_delete_route = client.delete("/delete-route/", headers={"route-id": route_id})
+
+    assert res_delete_route.status_code == 200
+
+    res_get_route = client.get("/get-route/", headers={"route-id": route_id})
+
+    assert res_get_route.status_code == 200
+    assert len(res_get_route.json()) == 0
+
+
+def test_delete_user():
+    user_id = "12345678-abcd-1234-efgh-123456789000"
+    res_get_user = client.get("/get-user/", headers={"user-id": user_id})
+
+    assert res_get_user.status_code == 200
+    assert len(res_get_user.json()) == 1
+
+    res_delete_user = client.delete("/delete-user/", headers={"user-id": user_id})
+
+    assert res_delete_user.status_code == 200
+
+    res_get_user = client.get("/get-user/", headers={"user-id": user_id})
+
+    assert res_get_user.status_code == 200
+    assert len(res_get_user.json()) == 0
 
 
 def test_remove_db():
