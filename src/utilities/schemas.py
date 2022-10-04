@@ -29,7 +29,6 @@ class CoordinateCreate(CoordinateBase):
 class Coordinate(CoordinateBase):
     """Attributes (addition to CoordinateBase) that are seen when reading data"""
 
-    id: int
     ts: datetime
 
     class Config:
