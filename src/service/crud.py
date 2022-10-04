@@ -76,14 +76,18 @@ def deactivate_route(route_id: str, db: Session):
 
 def delete_user(user_id: str, db: Session):
     """Delete user"""
-    db.query(models.User).filter(models.User.id == user_id).delete()
+    deleted_rows = db.query(models.User).filter(models.User.id == user_id).delete()
     db.commit()
+
+    return deleted_rows
 
 
 def delete_route(route_id: str, db: Session):
     """Delete route"""
-    db.query(models.Route).filter(models.Route.id == route_id).delete()
+    deleted_rows = db.query(models.Route).filter(models.Route.id == route_id).delete()
     db.commit()
+
+    return deleted_rows
 
 
 def _create(db_object, db: Session):

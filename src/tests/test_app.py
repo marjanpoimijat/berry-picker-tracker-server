@@ -235,6 +235,7 @@ def test_delete_route():
     res_delete_route = client.delete("/delete-route/", headers={"route-id": route_id})
 
     assert res_delete_route.status_code == 200
+    assert res_delete_route.json() == 1
 
     res_get_route = client.get("/get-route/", headers={"route-id": route_id})
 
@@ -252,6 +253,7 @@ def test_delete_user():
     res_delete_user = client.delete("/delete-user/", headers={"user-id": user_id})
 
     assert res_delete_user.status_code == 200
+    assert res_delete_user.json() == 1
 
     res_get_user = client.get("/get-user/", headers={"user-id": user_id})
 
