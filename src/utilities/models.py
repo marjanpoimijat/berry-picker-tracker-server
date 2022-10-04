@@ -38,16 +38,15 @@ class Route(Base):
 class Coordinate(Base):
     __tablename__ = "coordinates"
 
-    id = Column(Integer, primary_key=True, unique=True)
     route_id = Column(
         String, ForeignKey("routes.id", ondelete="CASCADE"), nullable=False
     )
     latitude = Column(Float, nullable=False)
     longitude = Column(Float, nullable=False)
     mnc = Column(Integer)
-    ts = Column(DateTime(timezone=True), server_default=func.now())
+    ts = Column(DateTime(timezone=True), default=func.now())
 
-    # __table_args__ = (PrimaryKeyConstraint(route_id, ts), {})
+    __table_args__ = (PrimaryKeyConstraint(route_id, ts), {})
 
     route = relationship(
         "Route",
