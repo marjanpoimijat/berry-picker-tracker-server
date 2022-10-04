@@ -162,41 +162,43 @@ def test_create_waypoints_to_route_and_get_routes_waypoints():
 
     res_post_coord = client.post(
         "/create-waypoint/",
-        json={"route_id": route_id, "latitude": 1.0, "longitude": 1.0, "mnc": 200},
+        json=[{"route_id": route_id, "latitude": 1.0, "longitude": 1.0, "mnc": 200}],
     )
+
     assert res_post_coord.status_code == 200
-    assert res_post_coord.json()["latitude"] == 1.0
-    assert res_post_coord.json()["longitude"] == 1.0
+    assert res_post_coord.json()[0]["latitude"] == 1.0
+    assert res_post_coord.json()[0]["longitude"] == 1.0
 
     time.sleep(1)
 
     res_post_coord = client.post(
         "/create-waypoint/",
-        json={"route_id": route_id, "latitude": 1.1, "longitude": 1.1, "mnc": 200},
+        json=[{"route_id": route_id, "latitude": 1.1, "longitude": 1.1, "mnc": 200}],
     )
     assert res_post_coord.status_code == 200
-    assert res_post_coord.json()["latitude"] == 1.1
-    assert res_post_coord.json()["longitude"] == 1.1
+    assert res_post_coord.json()[0]["latitude"] == 1.1
+    assert res_post_coord.json()[0]["longitude"] == 1.1
 
     time.sleep(1)
 
     res_post_coord = client.post(
         "/create-waypoint/",
-        json={"route_id": route_id, "latitude": 1.2, "longitude": 1.2, "mnc": 200},
+        json=[{"route_id": route_id, "latitude": 1.2, "longitude": 1.2, "mnc": 200}],
     )
     assert res_post_coord.status_code == 200
-    assert res_post_coord.json()["latitude"] == 1.2
-    assert res_post_coord.json()["longitude"] == 1.2
+    assert res_post_coord.json()[0]["latitude"] == 1.2
+    assert res_post_coord.json()[0]["longitude"] == 1.2
 
     time.sleep(1)
 
     res_post_coord = client.post(
         "/create-waypoint/",
-        json={"route_id": route_id, "latitude": 1.3, "longitude": 1.3, "mnc": 200},
+        json=[{"route_id": route_id, "latitude": 1.3, "longitude": 1.3, "mnc": 200}],
     )
+
     assert res_post_coord.status_code == 200
-    assert res_post_coord.json()["latitude"] == 1.3
-    assert res_post_coord.json()["longitude"] == 1.3
+    assert res_post_coord.json()[0]["latitude"] == 1.3
+    assert res_post_coord.json()[0]["longitude"] == 1.3
 
     res_get_route_waypoints = client.get(
         "/get-route-waypoints/", headers={"route-id": route_id}

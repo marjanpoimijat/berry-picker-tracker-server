@@ -1,3 +1,5 @@
+from typing import List
+
 from sqlalchemy.orm import Session
 
 import utilities.models as models
@@ -26,13 +28,16 @@ def create_new_route(route: schemas.RouteCreate, db: Session):
     return db_route
 
 
-def create_new_waypoint(coordinate: schemas.CoordinateCreate, db: Session):
-    """Add routes new waypoint to DB, takes json body as a parameter and compares (and validates) it according to schemas.py"""
-    db_waypoint = models.Coordinate(**coordinate.dict())
+def create_new_waypoint(coordinates: List[schemas.CoordinateCreate], db: Session):
+    """Add routes new waypoint to DB, takes list of coordinate objects as a parameter and compares (and validates) it according to schemas.py"""
+    db_waypoints = list(
+        map(lambda coord: models.Coordinate(**coord.dict()), coordinates)
+    )
 
-    _create(db_waypoint, db)
+    for coord in db_waypoints:
+        _create(coord, db)
 
-    return db_waypoint
+    return db_waypoints
 
 
 def get_user_by_id(user_id: str, db: Session):

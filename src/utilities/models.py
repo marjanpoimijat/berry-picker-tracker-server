@@ -26,7 +26,7 @@ class Route(Base):
     user_id = Column(String, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     active = Column(Boolean)
 
-    user = relationship("User", back_populates="routes")
+    user = relationship("User", back_populates="routes", cascade="all, delete")
     coordinates = relationship(
         "Coordinate",
         back_populates="route",
@@ -38,7 +38,7 @@ class Route(Base):
 class Coordinate(Base):
     __tablename__ = "coordinates"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, unique=True)
     route_id = Column(
         String, ForeignKey("routes.id", ondelete="CASCADE"), nullable=False
     )
@@ -49,4 +49,9 @@ class Coordinate(Base):
 
     # __table_args__ = (PrimaryKeyConstraint(route_id, ts), {})
 
-    route = relationship("Route", back_populates="coordinates")
+    route = relationship(
+        "Route",
+        back_populates="coordinates",
+        cascade="all, delete",
+        passive_deletes=True,
+    )
