@@ -23,20 +23,20 @@ class Route(Base):
     __tablename__ = "routes"
 
     id = Column(String, primary_key=True, unique=True, nullable=False)
-    user_id = Column(String, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(String, ForeignKey("users.id", ondelete="CASCADE"))
     active = Column(Boolean)
 
-    user = relationship("User", back_populates="routes", cascade="all, delete")
-    coordinates = relationship(
-        "Coordinate",
+    user = relationship("User", back_populates="routes")
+    waypoints = relationship(
+        "Waypoint",
         back_populates="route",
         cascade="all, delete",
         passive_deletes=True,
     )
 
 
-class Coordinate(Base):
-    __tablename__ = "coordinates"
+class Waypoint(Base):
+    __tablename__ = "waypoints"
 
     route_id = Column(
         String, ForeignKey("routes.id", ondelete="CASCADE"), nullable=False
@@ -48,9 +48,4 @@ class Coordinate(Base):
 
     __table_args__ = (PrimaryKeyConstraint(route_id, ts), {})
 
-    route = relationship(
-        "Route",
-        back_populates="coordinates",
-        cascade="all, delete",
-        passive_deletes=True,
-    )
+    route = relationship("Route", back_populates="waypoints")

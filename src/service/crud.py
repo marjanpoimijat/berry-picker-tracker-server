@@ -28,14 +28,12 @@ def create_new_route(route: schemas.RouteCreate, db: Session):
     return db_route
 
 
-def create_new_waypoint(coordinates: List[schemas.CoordinateCreate], db: Session):
-    """Add routes new waypoint to DB, takes list of coordinate objects as a parameter and compares (and validates) it according to schemas.py"""
-    db_waypoints = list(
-        map(lambda coord: models.Coordinate(**coord.dict()), coordinates)
-    )
+def create_new_waypoint(waypoints: List[schemas.WaypointCreate], db: Session):
+    """Add routes new waypoint to DB, takes list of Waypoint objects as a parameter and compares (and validates) it according to schemas.py"""
+    db_waypoints = list(map(lambda wayp: models.Waypoint(**wayp.dict()), waypoints))
 
-    for coord in db_waypoints:
-        _create(coord, db)
+    for wayp in db_waypoints:
+        _create(wayp, db)
 
     return db_waypoints
 
@@ -55,13 +53,11 @@ def get_users_routes(user_id: str, db: Session):
 
 def get_routes_waypoints(route_id: str, db: Session):
     """Get routes waypoints"""
-    return (
-        db.query(models.Coordinate).filter(models.Coordinate.route_id == route_id).all()
-    )
+    return db.query(models.Waypoint).filter(models.Waypoint.route_id == route_id).all()
 
 
 def deactivate_route(route_id: str, db: Session):
-    """Changes routes 'active' column to false"""
+    """Changes route's 'active' column to false"""
     try:
         to_update = get_route_by_id(route_id, db)[0]
         to_update.active = False
