@@ -11,7 +11,6 @@ from utilities.db import SessionLocal
 from utilities.db import Base, engine
 
 load_dotenv()
-database_uri = os.environ.get("DATABASE_URI")
 API_KEY = os.environ.get("NLS_API_KEY")
 app = FastAPI()
 
@@ -39,11 +38,6 @@ def get_nls_tile(z, y, x):
     if response.status_code == 200:
         return Response(content=response.content, media_type="image/png", status_code=200)
     return HTTPException(status_code=404, detail="Image not found.")
-
-@app.get("/all")
-def get_all():
-    """Get all coordinate database entries"""
-    return service.get_all_coordinate_entries()
 
 @app.post("/new-user/")
 def create_new_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
