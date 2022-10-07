@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, Union
+from typing import List
 from pydantic import BaseModel, Field
 from uuid import uuid4
 
@@ -12,8 +12,8 @@ def get_uuid():
     return str(uuid4())
 
 
-class CoordinateBase(BaseModel):
-    """Common attributes for Coordinate objects"""
+class WaypointBase(BaseModel):
+    """Common attributes for Waypoint objects"""
 
     route_id: str
     latitude: float
@@ -21,13 +21,13 @@ class CoordinateBase(BaseModel):
     mnc: int
 
 
-class CoordinateCreate(CoordinateBase):
-    # Creating coordinates does not need additional data
+class WaypointCreate(WaypointBase):
+    # Creating waypoints does not need additional data
     pass
 
 
-class Coordinate(CoordinateBase):
-    """Attributes (addition to CoordinateBase) that are seen when reading data"""
+class Waypoint(WaypointBase):
+    """Attributes (addition to WaypointteBase) that are seen when reading data"""
 
     ts: datetime
 
@@ -52,7 +52,7 @@ class RouteCreate(RouteBase):
 class Route(RouteBase):
     """Attributes (Addition to RouteBase) that are seen when reading data"""
 
-    coordinates: List[Coordinate] = []
+    waypoints: List[Waypoint] = []
 
     class Config:
         orm_mode = True
