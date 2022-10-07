@@ -1,0 +1,36 @@
+secrets:
+  db-passwd:
+    file: .secrets/db-passwd
+networks:
+  default:
+    name: prod-net
+    external: true
+
+services:
+  app:
+    build: .
+    image: bpt-server:latest
+    container_name: bpt-production
+    ports:
+      - 80:80
+    secrets:
+      - db-passwd
+    depends_on:
+      database:
+        condition: service_healthy
+  database:
+    image: postgres
+    container_name: db-production
+    restart: always
+    volumes:
+      - /bpt/production/db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD_FILE: /run/secrets/db-passwd
+      POSTGRES_DB: bpt
+    secrets:
+      - db-passwd
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
