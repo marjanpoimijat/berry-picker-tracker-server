@@ -28,7 +28,7 @@ def get_db():
 @app.get("/")
 def redirect_root():
     """Root's warmest welcome"""
-    return "Terppa"
+    return "G'day"
 
 
 @app.get("/nlsapi/{z}/{y}/{x}")
