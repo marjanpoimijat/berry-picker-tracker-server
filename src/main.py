@@ -28,16 +28,21 @@ def get_db():
 @app.get("/")
 def redirect_root():
     """Root's warmest welcome"""
-    return "G'day"
+    return "Terppa"
+
 
 @app.get("/nlsapi/{z}/{y}/{x}")
 def get_nls_tile(z, y, x):
-    url = "https://avoin-karttakuva.maanmittauslaitos.fi/avoin/wmts/1.0.0/maastokartta/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.png"\
-        .format(z=z, y=y, x=x)
-    response =requests.get(url, auth=(API_KEY, ""), stream=True)
+    url = "https://avoin-karttakuva.maanmittauslaitos.fi/avoin/wmts/1.0.0/maastokartta/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.png".format(
+        z=z, y=y, x=x
+    )
+    response = requests.get(url, auth=(API_KEY, ""), stream=True)
     if response.status_code == 200:
-        return Response(content=response.content, media_type="image/png", status_code=200)
+        return Response(
+            content=response.content, media_type="image/png", status_code=200
+        )
     return HTTPException(status_code=404, detail="Image not found.")
+
 
 @app.post("/new-user/")
 def create_new_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
