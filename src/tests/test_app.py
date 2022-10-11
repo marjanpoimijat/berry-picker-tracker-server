@@ -204,6 +204,7 @@ def test_create_waypoints_to_route_and_get_routes_waypoints():
         "/get-route-waypoints/", headers={"route-id": route_id}
     )
 
+    assert res_get_route_waypoints.status_code == 200
     assert len(res_get_route_waypoints.json()) == 4
 
 
@@ -223,6 +224,33 @@ def test_get_routes_first_and_latest_waypoint():
         < coordinates[2]["ts"]
         < coordinates[3]["ts"]
     )
+
+
+def test_waypoint_timestamp_can_be_given():
+    route_id = "22222222-2a2a-2222-2b2b-222222222222"
+    ts = "2077-10-23T09:47:00"
+
+    res_post_waypoint = client.post(
+        "/create-waypoint/",
+        json=[
+            {
+                "route_id": route_id,
+                "latitude": 1.4,
+                "longitude": 1.4,
+                "mnc": 200,
+                "ts": ts,
+            }
+        ],
+    )
+
+    assert res_post_waypoint.status_code == 200
+
+    res_get_route_waypoints = client.get(
+        "/get-route-waypoints/", headers={"route-id": route_id}
+    )
+
+    assert len(res_get_route_waypoints.json()) == 5
+    assert res_get_route_waypoints.json()[4]["ts"] == ts
 
 
 def test_delete_route():
