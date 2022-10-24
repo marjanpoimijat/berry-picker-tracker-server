@@ -12,6 +12,11 @@ def get_uuid():
     return str(uuid4())
 
 
+def get_timestamp():
+    """Generate timestamp"""
+    return datetime.now()
+
+
 class WaypointBase(BaseModel):
     """Common attributes for Waypoint objects"""
 
@@ -19,6 +24,7 @@ class WaypointBase(BaseModel):
     latitude: float
     longitude: float
     mnc: int
+    ts: datetime = Field(default_factory=get_timestamp)
 
 
 class WaypointCreate(WaypointBase):
@@ -28,8 +34,6 @@ class WaypointCreate(WaypointBase):
 
 class Waypoint(WaypointBase):
     """Attributes (addition to WaypointteBase) that are seen when reading data"""
-
-    ts: datetime
 
     class Config:
         orm_mode = True

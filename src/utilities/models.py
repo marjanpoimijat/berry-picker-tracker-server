@@ -1,7 +1,6 @@
 from sqlalchemy import Column, String, Integer, Boolean, Float, ForeignKey, DateTime
 from sqlalchemy.schema import PrimaryKeyConstraint
 from sqlalchemy.orm import relationship
-from sqlalchemy.sql import func
 
 
 from .db import Base
@@ -44,7 +43,7 @@ class Waypoint(Base):
     latitude = Column(Float, nullable=False)
     longitude = Column(Float, nullable=False)
     mnc = Column(Integer)
-    ts = Column(DateTime(timezone=True), default=func.now())
+    ts = Column(DateTime)
 
     __table_args__ = (PrimaryKeyConstraint(route_id, ts), {})
 
