@@ -15,6 +15,12 @@ source ./.venv/bin/activate && \      # Activate the virtual environment
 pip3 install -r requirements.txt && \ # Install dependencies — see `./requirements.txt` for more info
 pre-commit install && \               # Install the pre-commit hook
 pre-commit autoupdate                 # Update the pre-commit hooks
+touch .env                            # For environmental variables
+```
+
+Add the following to .env-file:
+```bash
+DATABASE_URI=postgresql://<postgres-username>:<postgres-password>@localhost/postgres
 ```
 
 ### Updating dependencies
