@@ -16,7 +16,7 @@ services:
     ports:
       - 88:80
     depends_on:
-      database:
+      database-stage:
         condition: service_healthy
     env_file:
       - ./.env
