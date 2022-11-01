@@ -1,0 +1,38 @@
+secrets:
+  db-passwd:
+    file: .secrets/db-passwd
+networks:
+  default:
+    name: stage-net
+    external: true
+
+services:
+  app-stage:
+    secrets:
+      - db-passwd
+    build: .
+    image: bpt-stage:latest
+    container_name: bpt-stage
+    ports:
+      - 80:88
+    depends_on:
+      database:
+        condition: service_healthy
+    env_file:
+      - ./.env
+  database:
+    image: postgres
+    container_name: db-stage
+    restart: always
+    volumes:
+      - /bpt/staging/db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD_FILE: /run/secrets/db-passwd
+      POSTGRES_DB: bpt_stage
+    secrets:
+      - db-passwd
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
