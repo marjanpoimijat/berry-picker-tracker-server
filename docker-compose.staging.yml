@@ -32,7 +32,7 @@ services:
     secrets:
       - db-passwd
     networks:
-      stage-net:
+      default:
         aliases:
           - database
     healthcheck:
