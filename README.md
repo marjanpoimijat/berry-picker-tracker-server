@@ -18,10 +18,7 @@ pre-commit autoupdate                 # Update the pre-commit hooks
 touch .env                            # For environmental variables
 ```
 
-Add the following to .env-file:
-```bash
-DATABASE_URI=postgresql://<postgres-username>:<postgres-password>@localhost/postgres
-```
+Instructions to set up environment variables check [HERE](https://github.com/hy-ohtu-syksy-22-bpt/berry-picker-tracker-docs/blob/main/db_locally_instructions.md#setting-up-environment-variables)
 
 ### Updating dependencies
 
