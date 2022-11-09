@@ -49,3 +49,7 @@ If you stumble upon `ModuleNotFoundError`, run
 ```bash
 python3 -m pytest
 ```
+
+## Licenses
+
+[Licenses](https://github.com/hy-ohtu-syksy-22-bpt/berry-picker-tracker-server/tree/main/licenses)
