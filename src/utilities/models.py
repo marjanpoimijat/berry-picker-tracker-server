@@ -22,7 +22,7 @@ class Route(Base):
     __tablename__ = "routes"
 
     id = Column(String, primary_key=True, unique=True, nullable=False)
-    user_id = Column(String, ForeignKey("users.id", ondelete="CASCADE"))
+    user_id = Column(String, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     active = Column(Boolean)
 
     user = relationship("User", back_populates="routes")

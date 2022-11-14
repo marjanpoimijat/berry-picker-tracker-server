@@ -122,6 +122,12 @@ def test_create_route_for_user_with_given_id_and_get_route():
     assert res_get.json()[0]["id"] == route_id
 
 
+def test_create_route_with_non_existent_user():
+    res_post = client.post("/start-route/", json={"user_id": "safsafas"})
+
+    assert res_post.status_code == 404
+
+
 def test_get_users_routes():
     res_get = client.get(
         "/get-user-routes", headers={"user-id": "12345678-abcd-1234-efgh-123456789000"}
@@ -317,8 +323,8 @@ def test_null_connection_can_be_given():
         json=[
             {
                 "route_id": route_id,
-                "latitude": 1.4,
-                "longitude": 1.4,
+                "latitude": 1.5,
+                "longitude": 1.5,
                 "mnc": 200,
                 "ts": ts,
                 "connection": None,
@@ -333,10 +339,64 @@ def test_null_connection_can_be_given():
     )
 
     assert res_get_route_waypoints.status_code == 200
-    print("HALOOO")
-    print(res_get_route_waypoints.json())
-    print("HALOOOO")
     assert res_get_route_waypoints.json()[5]["connection"] == None
+
+
+def test_null_mnc_can_be_given():
+    route_id = "22222222-2a2a-2222-2b2b-222222222222"
+    ts = "2888-10-23T09:47:00"
+
+    res_post_waypoint = client.post(
+        "/create-waypoint/",
+        json=[
+            {
+                "route_id": route_id,
+                "latitude": 1.6,
+                "longitude": 1.6,
+                "mnc": None,
+                "ts": ts,
+                "connection": "5g",
+            }
+        ],
+    )
+
+    assert res_post_waypoint.status_code == 200
+
+    res_get_route_waypoints = client.get(
+        "/get-route-waypoints/", headers={"route-id": route_id}
+    )
+
+    assert res_get_route_waypoints.status_code == 200
+    assert res_get_route_waypoints.json()[6]["mnc"] == None
+
+
+def test_no_connection_waypoint_can_be_given():
+    route_id = "22222222-2a2a-2222-2b2b-222222222222"
+    ts = "3077-10-23T09:47:00"
+
+    res_post_waypoint = client.post(
+        "/create-waypoint/",
+        json=[
+            {
+                "route_id": route_id,
+                "latitude": 1.7,
+                "longitude": 1.7,
+                "mnc": None,
+                "ts": ts,
+                "connection": None,
+            }
+        ],
+    )
+
+    assert res_post_waypoint.status_code == 200
+
+    res_get_route_waypoints = client.get(
+        "/get-route-waypoints/", headers={"route-id": route_id}
+    )
+
+    assert res_get_route_waypoints.status_code == 200
+    assert res_get_route_waypoints.json()[7]["mnc"] == None
+    assert res_get_route_waypoints.json()[7]["connection"] == None
 
 
 def test_delete_route():
