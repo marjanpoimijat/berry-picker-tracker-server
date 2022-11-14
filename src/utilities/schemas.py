@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel, Field
 from uuid import uuid4
 
@@ -23,8 +23,9 @@ class WaypointBase(BaseModel):
     route_id: str
     latitude: float
     longitude: float
-    mnc: int
+    mnc: int = Field(None, description="No MNC code")
     ts: datetime = Field(default_factory=get_timestamp)
+    connection: Optional[str] = Field(None, description="No connection")
 
 
 class WaypointCreate(WaypointBase):

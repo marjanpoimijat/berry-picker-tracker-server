@@ -42,8 +42,9 @@ class Waypoint(Base):
     )
     latitude = Column(Float, nullable=False)
     longitude = Column(Float, nullable=False)
-    mnc = Column(Integer)
+    mnc = Column(Integer, nullable=True)
     ts = Column(DateTime)
+    connection = Column(String, nullable=True)
 
     __table_args__ = (PrimaryKeyConstraint(route_id, ts), {})
 

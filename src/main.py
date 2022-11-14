@@ -56,7 +56,6 @@ def create_new_route(route: schemas.RouteCreate, db: Session = Depends(get_db)):
     return crud.create_new_route(route, db)
 
 
-# Have to think about some system to post waypoints if many waypoints posted at the same time (like after being offline for a while)
 @app.post("/create-waypoint/")
 def create_new_waypoint(
     waypoints: List[schemas.WaypointCreate], db: Session = Depends(get_db)
