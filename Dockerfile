@@ -8,4 +8,4 @@ RUN apt-get update                                              && \
     rm -rf /var/lib/apt/lists/*
 
 COPY src/ ./
-CMD [ "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80" ]
+CMD [ "uvicorn", "main:app", "--proxy-headers", "--host", "0.0.0.0", "--port", "80" ]
