@@ -7,6 +7,18 @@ networks:
     external: true
 
 services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - 80:80
+      - 443:443
+    restart: always
+    volumes:
+      - ../nginx/conf/:/etc/nginx/conf.d/:ro
+      - ../certbot/www:/var/www/certbot/:ro
+  certbot:
+    image: certbot:latest
+    volumes: -../certbot/www:/var/www/certbot/:rw
   app:
     build: .
     image: bpt-server:latest
@@ -32,7 +44,7 @@ services:
     secrets:
       - db-passwd
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
       retries: 5
