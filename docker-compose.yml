@@ -18,7 +18,8 @@ services:
       - ../certbot/www:/var/www/certbot/:ro
   certbot:
     image: certbot
-    volumes: -../certbot/www:/var/www/certbot/:rw
+    volumes:
+      - ../certbot/www:/var/www/certbot/:rw
   app:
     build: .
     image: bpt-server:latest
