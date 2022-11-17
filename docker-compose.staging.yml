@@ -7,6 +7,20 @@ networks:
     external: true
 
 services:
+  nginx:
+    image: nginx
+    ports:
+      - 4443:80 #Port 4443(staging) to outside and gunicorn runs on 80
+    restart: always
+    volumes:
+      - ./nginx/conf:/etc/nginx/conf.d/:ro # Read config from ./nginx
+      - ../../certbot/www:/var/www/certbot/:ro
+      - ../../certbot/conf/:/etc/nginx/ssl/:ro # Get certificates to nginx
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ../../certbot/www/:/var/www/certbot/:rw # Certbot uses to renew certificates ?
+      - ../../certbot/conf/:/etc/letsencrypt/:rw # Location of certificates
   app-stage:
     secrets:
       - db-passwd
@@ -36,7 +50,7 @@ services:
         aliases:
           - database
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
       retries: 5
