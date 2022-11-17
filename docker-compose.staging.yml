@@ -27,8 +27,6 @@ services:
     build: .
     image: bpt-stage:latest
     container_name: bpt-stage
-    ports:
-      - 88:80
     depends_on:
       database-stage:
         condition: service_healthy
