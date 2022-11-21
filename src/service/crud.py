@@ -20,8 +20,12 @@ def create_user(user: schemas.UserCreate, db: Session):
 
 
 def create_new_route(route: schemas.RouteCreate, db: Session):
-    """Add users new route to DB, takes json body as a parameter and compares (and validates) it according to schemas.py"""
+    """Add users new route to DB (if user found in db), takes json body as a parameter and compares (and validates) it according to schemas.py"""
     db_route = models.Route(**route.dict())
+    user = get_user_by_id(db_route.user_id, db)
+
+    if len(user) == 0:
+        return False
 
     _create(db_route, db)
 

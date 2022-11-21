@@ -41,7 +41,7 @@ def get_nls_tile(z, y, x):
         return Response(
             content=response.content, media_type="image/png", status_code=200
         )
-    return HTTPException(status_code=404, detail="Image not found.")
+    raise HTTPException(status_code=404, detail="Image not found.")
 
 
 @app.post("/new-user/")
@@ -53,10 +53,16 @@ def create_new_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
 @app.post("/start-route/")
 def create_new_route(route: schemas.RouteCreate, db: Session = Depends(get_db)):
     """Create a new route for the user given in route object"""
-    return crud.create_new_route(route, db)
+    db_route = crud.create_new_route(route, db)
+
+    if db_route is False:
+        raise HTTPException(
+            status_code=404, detail="User not found, can't start a route"
+        )
+
+    return db_route
 
 
-# Have to think about some system to post waypoints if many waypoints posted at the same time (like after being offline for a while)
 @app.post("/create-waypoint/")
 def create_new_waypoint(
     waypoints: List[schemas.WaypointCreate], db: Session = Depends(get_db)
