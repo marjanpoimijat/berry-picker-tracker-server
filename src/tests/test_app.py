@@ -420,8 +420,6 @@ def test_get_users_latest_routes_waypoints():
 
     res_waypoints = client.get("/get-users-latest-route/", headers={"user-id": user_id})
 
-    print(res_waypoints.json())
-
     assert res_waypoints.status_code == 200
 
     is_active = res_waypoints.json()[1]
