@@ -1,4 +1,4 @@
-import json
+import re
 import time
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
@@ -67,12 +67,8 @@ def test_create_and_get_users_with_generated_id():
 
 
 def test_create_and_get_users_with_given_id():
-    res1_post = client.post(
-        "/new-user/", json={"id": "12345678-abcd-1234-efgh-123456789000"}
-    )
-    res2_post = client.post(
-        "/new-user/", json={"id": "87654321-dcba-4321-hgfe-000987654321"}
-    )
+    res1_post = client.post("/new-user/", json={"id": "a1b2c3d4e5f6g7h8i9j10"})
+    res2_post = client.post("/new-user/", json={"id": "10j9i8h7g6f5e4d3c2b1a"})
 
     assert res1_post.status_code == 200
     assert res2_post.status_code == 200
@@ -91,9 +87,7 @@ def test_create_and_get_users_with_given_id():
 
 
 def test_create_route_for_user_with_generated_id_and_get_user():
-    res_post = client.post(
-        "/start-route/", json={"user_id": "12345678-abcd-1234-efgh-123456789000"}
-    )
+    res_post = client.post("/start-route/", json={"user_id": "a1b2c3d4e5f6g7h8i9j10"})
 
     assert res_post.status_code == 200
 
@@ -108,8 +102,8 @@ def test_create_route_for_user_with_given_id_and_get_route():
     res_post = client.post(
         "/start-route/",
         json={
-            "user_id": "12345678-abcd-1234-efgh-123456789000",
-            "id": "1111111-abcd-1111-efgh-111111111111",
+            "user_id": "a1b2c3d4e5f6g7h8i9j10",
+            "id": "r1r2r3r4r5r6r7r8r9r10",
         },
     )
 
@@ -122,6 +116,28 @@ def test_create_route_for_user_with_given_id_and_get_route():
     assert res_get.json()[0]["id"] == route_id
 
 
+def test_create_user_and_route_with_generated_id_and_id_is_in_nanoid_form():
+    res_user = client.post("/new-user/", json={})
+
+    assert res_user.status_code == 200
+
+    user_id = res_user.json()["id"]
+
+    res_route = client.post("/start-route/", json={"user_id": user_id})
+
+    assert res_route.status_code == 200
+
+    route_id = res_route.json()["id"]
+
+    pattern = re.compile(r"^[A-Za-z0-9-_']{21}$")
+
+    user_id_matches = bool(pattern.match(user_id))
+    route_id_matches = bool(pattern.match(route_id))
+
+    assert user_id_matches
+    assert route_id_matches
+
+
 def test_create_route_with_non_existent_user():
     res_post = client.post("/start-route/", json={"user_id": "safsafas"})
 
@@ -130,7 +146,7 @@ def test_create_route_with_non_existent_user():
 
 def test_get_users_routes():
     res_get = client.get(
-        "/get-user-routes", headers={"user-id": "12345678-abcd-1234-efgh-123456789000"}
+        "/get-user-routes", headers={"user-id": "a1b2c3d4e5f6g7h8i9j10"}
     )
 
     assert res_get.status_code == 200
@@ -140,7 +156,7 @@ def test_get_users_routes():
 def test_deactivate_route():
     res_patch = client.patch(
         "/deactivate-route/",
-        headers={"route-id": "1111111-abcd-1111-efgh-111111111111"},
+        headers={"route-id": "r1r2r3r4r5r6r7r8r9r10"},
     )
 
     assert res_patch.status_code == 200
@@ -157,8 +173,8 @@ def test_create_waypoints_to_route_and_get_routes_waypoints():
     res_post_route = client.post(
         "/start-route/",
         json={
-            "user_id": "12345678-abcd-1234-efgh-123456789000",
-            "id": "22222222-2a2a-2222-2b2b-222222222222",
+            "user_id": "a1b2c3d4e5f6g7h8i9j10",
+            "id": "10r9r8r7r6r5r4r3r2r1r",
         },
     )
 
@@ -251,7 +267,7 @@ def test_create_waypoints_to_route_and_get_routes_waypoints():
 
 
 def test_get_routes_first_and_latest_waypoint():
-    route_id = "22222222-2a2a-2222-2b2b-222222222222"
+    route_id = "10r9r8r7r6r5r4r3r2r1r"
     res_get_route_waypoints = client.get(
         "/get-route-waypoints/", headers={"route-id": route_id}
     )
@@ -269,7 +285,7 @@ def test_get_routes_first_and_latest_waypoint():
 
 
 def test_waypoint_timestamp_can_be_given():
-    route_id = "22222222-2a2a-2222-2b2b-222222222222"
+    route_id = "10r9r8r7r6r5r4r3r2r1r"
     ts = "2077-10-23T09:47:00"
 
     res_post_waypoint = client.post(
@@ -297,7 +313,7 @@ def test_waypoint_timestamp_can_be_given():
 
 
 def test_different_connection_types_are_in_database_entries():
-    route_id = "22222222-2a2a-2222-2b2b-222222222222"
+    route_id = "10r9r8r7r6r5r4r3r2r1r"
 
     res_get_route_waypoints = client.get(
         "/get-route-waypoints/", headers={"route-id": route_id}
@@ -315,7 +331,7 @@ def test_different_connection_types_are_in_database_entries():
 
 
 def test_null_connection_can_be_given():
-    route_id = "22222222-2a2a-2222-2b2b-222222222222"
+    route_id = "10r9r8r7r6r5r4r3r2r1r"
     ts = "2777-10-23T09:47:00"
 
     res_post_waypoint = client.post(
@@ -343,7 +359,7 @@ def test_null_connection_can_be_given():
 
 
 def test_null_mnc_can_be_given():
-    route_id = "22222222-2a2a-2222-2b2b-222222222222"
+    route_id = "10r9r8r7r6r5r4r3r2r1r"
     ts = "2888-10-23T09:47:00"
 
     res_post_waypoint = client.post(
@@ -371,7 +387,7 @@ def test_null_mnc_can_be_given():
 
 
 def test_no_connection_waypoint_can_be_given():
-    route_id = "22222222-2a2a-2222-2b2b-222222222222"
+    route_id = "10r9r8r7r6r5r4r3r2r1r"
     ts = "3077-10-23T09:47:00"
 
     res_post_waypoint = client.post(
@@ -400,7 +416,7 @@ def test_no_connection_waypoint_can_be_given():
 
 
 def test_delete_route():
-    route_id = "22222222-2a2a-2222-2b2b-222222222222"
+    route_id = "10r9r8r7r6r5r4r3r2r1r"
     res_get_route = client.get("/get-route/", headers={"route-id": route_id})
 
     assert res_get_route.status_code == 200
@@ -418,7 +434,7 @@ def test_delete_route():
 
 
 def test_delete_user():
-    user_id = "12345678-abcd-1234-efgh-123456789000"
+    user_id = "a1b2c3d4e5f6g7h8i9j10"
     res_get_user = client.get("/get-user/", headers={"user-id": user_id})
 
     assert res_get_user.status_code == 200
