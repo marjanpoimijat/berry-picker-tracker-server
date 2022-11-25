@@ -1,3 +1,4 @@
+from pydantic import parse_obj_as
 from typing import List
 
 from sqlalchemy.orm import Session
@@ -53,6 +54,22 @@ def get_route_by_id(route_id: str, db: Session):
 def get_users_routes(user_id: str, db: Session):
     """Get users routes"""
     return db.query(models.Route).filter(models.Route.user_id == user_id).all()
+
+
+def get_users_latest_route(user_id: str, db: Session):
+    """Get users latest route"""
+    routes = db.query(models.Route).filter(models.Route.user_id == user_id).all()
+
+    latest_route_id = getattr(routes[len(routes) - 1], "id")
+    is_route_active = getattr(routes[len(routes) - 1], "active")
+
+    waypoints = (
+        db.query(models.Waypoint)
+        .filter(models.Waypoint.route_id == latest_route_id)
+        .all()
+    )
+
+    return [latest_route_id, is_route_active, waypoints]
 
 
 def get_routes_waypoints(route_id: str, db: Session):

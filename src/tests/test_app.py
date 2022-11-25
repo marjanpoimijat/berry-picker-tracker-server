@@ -415,6 +415,28 @@ def test_no_connection_waypoint_can_be_given():
     assert res_get_route_waypoints.json()[7]["connection"] == None
 
 
+def test_get_users_latest_routes_waypoints():
+    user_id = "a1b2c3d4e5f6g7h8i9j10"
+
+    res_waypoints = client.get("/get-users-latest-route/", headers={"user-id": user_id})
+
+    print(res_waypoints.json())
+
+    assert res_waypoints.status_code == 200
+
+    is_active = res_waypoints.json()[1]
+    waypoints = res_waypoints.json()[2]
+
+    assert len(waypoints) == 8
+    assert is_active == True
+
+    assert waypoints[0]["latitude"] == 1.0
+    assert waypoints[0]["longitude"] == 1.0
+
+    assert waypoints[len(waypoints) - 1]["latitude"] == 1.7
+    assert waypoints[len(waypoints) - 1]["longitude"] == 1.7
+
+
 def test_delete_route():
     route_id = "10r9r8r7r6r5r4r3r2r1r"
     res_get_route = client.get("/get-route/", headers={"route-id": route_id})
