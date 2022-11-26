@@ -11,6 +11,8 @@ services:
     secrets:
       - db-passwd
     build: .
+    ports:
+      - 8080:8080
     image: bpt-stage:latest
     container_name: bpt-stage
     depends_on:
