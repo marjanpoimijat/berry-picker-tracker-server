@@ -7,19 +7,6 @@ networks:
     external: true
 
 services:
-  nginx:
-    image: nginx:latest
-    ports:
-      - 80:80
-      - 443:443
-    restart: always
-    volumes:
-      - ../nginx/conf/:/etc/nginx/conf.d/:ro
-      - ../certbot/www:/var/www/certbot/:ro
-  certbot:
-    image: certbot
-    volumes:
-      - ../certbot/www:/var/www/certbot/:rw
   app:
     build: .
     image: bpt-server:latest
@@ -31,8 +18,6 @@ services:
     depends_on:
       database:
         condition: service_healthy
-    env_file:
-      - ./.env
   database:
     image: postgres
     container_name: db-production
