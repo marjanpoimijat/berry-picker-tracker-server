@@ -85,8 +85,14 @@ def get_route(route_id: str = Header(), db: Session = Depends(get_db)):
 
 @app.get("/get-user-routes/")
 def get_users_route(user_id: str = Header(), db: Session = Depends(get_db)):
-    """Get users route by user_id, provides user_id via custom header"""
+    """Get user's route by user_id, provides user_id via custom header"""
     return crud.get_users_routes(user_id, db)
+
+
+@app.get("/get-users-latest-route/")
+def get_user_latest_route(user_id: str = Header(), db: Session = Depends(get_db)):
+    """Get user's latest route, regardless of it being active or not"""
+    return crud.get_users_latest_route(user_id, db)
 
 
 @app.get("/get-route-waypoints/")
