@@ -1,15 +1,15 @@
 from datetime import datetime
 from typing import List, Optional
 from pydantic import BaseModel, Field
-from uuid import uuid4
+from nanoid import generate
 
 
 # This file is basically just for data validation
 
 
-def get_uuid():
-    """Generate uuid4 as a string"""
-    return str(uuid4())
+def get_nanoid():
+    """Generate nanoid as a string"""
+    return str(generate())
 
 
 def get_timestamp():
@@ -44,7 +44,7 @@ class Waypoint(WaypointBase):
 class RouteBase(BaseModel):
     """Common attributes for Route objects"""
 
-    id: str = Field(default_factory=get_uuid)
+    id: str = Field(default_factory=get_nanoid)
     user_id: str
     active: bool = True
 
@@ -67,7 +67,7 @@ class Route(RouteBase):
 class UserBase(BaseModel):
     """Common attributes for User objects"""
 
-    id: str = Field(default_factory=get_uuid)
+    id: str = Field(default_factory=get_nanoid)
 
 
 class UserCreate(UserBase):
