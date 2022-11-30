@@ -9,7 +9,9 @@ from nanoid import generate
 
 def get_nanoid():
     """Generate nanoid as a string"""
-    return str(generate())
+    return str(
+        generate("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", 12)
+    )
 
 
 def get_timestamp():
