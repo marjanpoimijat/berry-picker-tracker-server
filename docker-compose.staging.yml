@@ -12,7 +12,7 @@ services:
     image: bpt-server:alpha
     container_name: bpt-stage
     networks:
-      stage-net:
+      default:
         aliases:
           - app
     secrets:
