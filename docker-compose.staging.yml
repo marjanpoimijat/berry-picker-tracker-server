@@ -7,32 +7,36 @@ networks:
     external: false
 
 services:
-  app-stage:
+  app:
+    build: .
+    image: bpt-server:alpha
+    container_name: bpt-stage
+    networks:
+      stage-net:
+        aliases:
+          - app
     secrets:
       - db-passwd
-    build: .
-    image: bpt-stage:latest
-    container_name: bpt-stage
     depends_on:
-      database-stage:
+      db:
         condition: service_healthy
     env_file:
       - ./.env
-  database-stage:
+  db:
     image: postgres
     container_name: db-stage
-    restart: always
+    networks:
+      default:
+        aliases:
+          - database
+    secrets:
+      - db-passwd
     volumes:
       - /bpt/staging/db-data:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD_FILE: /run/secrets/db-passwd
       POSTGRES_DB: bpt_stage
-    secrets:
-      - db-passwd
-    networks:
-      default:
-        aliases:
-          - database
+    restart: always
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
