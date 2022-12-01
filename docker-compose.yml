@@ -4,15 +4,13 @@ secrets:
 networks:
   default:
     name: prod-net
-    external: true
+    external: false
 
 services:
   app:
     build: .
     image: bpt-server:latest
     container_name: bpt-production
-    ports:
-      - 8000:80
     secrets:
       - db-passwd
     depends_on:
