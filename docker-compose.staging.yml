@@ -4,7 +4,7 @@ secrets:
 networks:
   default:
     name: stage-net
-    external: true
+    external: false
 
 services:
   app-stage:
@@ -13,8 +13,6 @@ services:
     build: .
     image: bpt-stage:latest
     container_name: bpt-stage
-    ports:
-      - 80:80
     depends_on:
       database-stage:
         condition: service_healthy
