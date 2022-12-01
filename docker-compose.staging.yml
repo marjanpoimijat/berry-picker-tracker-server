@@ -4,7 +4,7 @@ secrets:
 networks:
   default:
     name: stage-net
-    external: false
+    external: true
 
 services:
   app:

@@ -4,7 +4,7 @@ secrets:
 networks:
   default:
     name: prod-net
-    external: false
+    external: true
 
 services:
   app:
