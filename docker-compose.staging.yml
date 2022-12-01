@@ -8,15 +8,13 @@ networks:
 
 services:
   app-stage:
-    volumes:
-      - /etc/letsencrypt/live/berry-picker-tracker.cs.helsinki.fi:/etc/ssl
     secrets:
       - db-passwd
     build: .
     image: bpt-stage:latest
     container_name: bpt-stage
     ports:
-      - 4443:80
+      - 80:80
     depends_on:
       database-stage:
         condition: service_healthy

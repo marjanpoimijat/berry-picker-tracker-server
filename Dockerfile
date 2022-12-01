@@ -8,4 +8,4 @@ RUN apt-get update                                              && \
     rm -rf /var/lib/apt/lists/*
 
 COPY src/ ./
-CMD [ "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80", "--ssl-keyfile=/etc/ssl/privkey.pem", "--ssl-certfile=/etc/ssl/fullchain.pem" ]
+CMD [ "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80" ]
