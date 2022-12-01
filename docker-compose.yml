@@ -10,15 +10,19 @@ services:
   app:
     build: .
     image: bpt-server:latest
-    container_name: bpt-production
+    container_name: bpt-prod
+    networks:
+      default:
+        aliases:
+          - app
     secrets:
       - db-passwd
     depends_on:
-      database:
+      db:
         condition: service_healthy
-  database:
+  db:
     image: postgres
-    container_name: db-production
+    container_name: db-prod
     restart: always
     volumes:
       - /bpt/production/db-data:/var/lib/postgresql/data
