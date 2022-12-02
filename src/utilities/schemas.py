@@ -8,7 +8,7 @@ from nanoid import generate
 
 
 def get_nanoid():
-    """Generate nanoid as a string"""
+    """Generate nanoid as a string, first argument for generate function are used symbols and second one is the lenght of the id"""
     return str(
         generate("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", 12)
     )

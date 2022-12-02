@@ -2,6 +2,7 @@ import requests
 import os
 from dotenv import load_dotenv
 from fastapi import FastAPI, Response, HTTPException, Depends, Header
+from fastapi.responses import RedirectResponse
 from typing import List
 from sqlalchemy.orm import Session
 
@@ -12,6 +13,7 @@ from utilities.db import Base, engine
 
 load_dotenv()
 API_KEY = os.environ.get("NLS_API_KEY")
+LEGEND_URI = os.environ.get("LEGEND_URI")
 app = FastAPI()
 
 
@@ -117,3 +119,9 @@ def delete_user(user_id: str = Header(), db: Session = Depends(get_db)):
 def delete_route(route_id: str = Header(), db: Session = Depends(get_db)):
     """Delete route by id, provides route_id via header"""
     return crud.delete_route(route_id, db)
+
+
+@app.get("/get-legend/")
+def get_legend():
+    print(LEGEND_URI)
+    return RedirectResponse(LEGEND_URI)
