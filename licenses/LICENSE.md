@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2022 Berry Picker Tracker AUTHORS
+Copyright (c) 2022 Riku Brandt, Topias Harjunpää, Anna Kangasmaa, Emma Koskinen, Sampo Kääriäinen, Santeri Salonen
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
