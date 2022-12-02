@@ -451,6 +451,32 @@ def test_delete_route():
     assert len(res_get_route.json()) == 0
 
 
+def test_no_latest_route_found_on_non_existent_user():
+    res_waypoints = client.get(
+        "/get-users-latest-route/", headers={"user-id": "111111111111"}
+    )
+
+    custom_error_message = res_waypoints.json()["detail"]
+
+    assert res_waypoints.status_code == 404
+    assert custom_error_message == "User or no routes found"
+
+
+def test_no_latest_route_found_on_user_with_no_routes():
+    user_id = "a1a1a1a1a1a1"
+    res_new_user = client.post("/new-user/", json={"id": user_id})
+
+    assert res_new_user.status_code == 200
+    assert res_new_user.json()["id"] == user_id
+
+    res_waypoints = client.get("/get-users-latest-route/", headers={"user-id": user_id})
+
+    custom_error_message = res_waypoints.json()["detail"]
+
+    assert res_waypoints.status_code == 404
+    assert custom_error_message == "User or no routes found"
+
+
 def test_delete_user():
     user_id = "a1b2c3d4e5f6"
     res_get_user = client.get("/get-user/", headers={"user-id": user_id})

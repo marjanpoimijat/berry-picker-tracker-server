@@ -60,6 +60,9 @@ def get_users_latest_route(user_id: str, db: Session):
     """Get users latest route"""
     routes = db.query(models.Route).filter(models.Route.user_id == user_id).all()
 
+    if len(routes) == 0:
+        return False
+
     latest_route_id = getattr(routes[len(routes) - 1], "id")
     is_route_active = getattr(routes[len(routes) - 1], "active")
 
