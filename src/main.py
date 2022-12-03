@@ -94,6 +94,11 @@ def get_users_route(user_id: str = Header(), db: Session = Depends(get_db)):
 @app.get("/get-users-latest-route/")
 def get_user_latest_route(user_id: str = Header(), db: Session = Depends(get_db)):
     """Get user's latest route, regardless of it being active or not"""
+    waypoints = crud.get_users_latest_route(user_id, db)
+
+    if waypoints is False:
+        raise HTTPException(status_code=404, detail="User or no routes found")
+
     return crud.get_users_latest_route(user_id, db)
 
 
