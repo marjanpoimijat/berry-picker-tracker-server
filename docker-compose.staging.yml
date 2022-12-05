@@ -14,7 +14,7 @@ services:
     networks:
       default:
         aliases:
-          - app
+          - app-stage
     secrets:
       - db-passwd
     depends_on:

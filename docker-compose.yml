@@ -14,7 +14,7 @@ services:
     networks:
       default:
         aliases:
-          - app
+          - app-prod
     secrets:
       - db-passwd
     depends_on:
