@@ -40,7 +40,7 @@ def get_rev_number():
     """Display the revision id and build date etc"""
     is_dev = SERVER_ENV == "development"
     return (
-        "Berry Picker Tracker Server\n" "Local developemtn"
+        "Berry Picker Tracker Server\n" "Local development"
         if is_dev
         else (f"Code revision: {REV_NUMBER}" f"Running in {SERVER_ENV}")
     )
