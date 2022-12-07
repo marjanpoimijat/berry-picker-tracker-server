@@ -39,11 +39,12 @@ def redirect_root():
 def get_rev_number():
     """Display the revision id and build date etc"""
     is_dev = SERVER_ENV == "development"
-    return (
-        "Berry Picker Tracker Server\n" "Local development"
+    details = (
+        "Local development"
         if is_dev
-        else (f"Code revision: {REV_NUMBER}" f"Running in {SERVER_ENV}")
+        else f"Code revision: {REV_NUMBER}\nRunning in {SERVER_ENV}"
     )
+    return f"Berry Picker Tracker Server\n{details}"
 
 
 @app.get("/nlsapi/{z}/{y}/{x}")
