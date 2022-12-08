@@ -25,18 +25,14 @@ services:
   db:
     image: postgres
     container_name: db-stage
-    networks:
-      default:
-        aliases:
-          - database
-    secrets:
-      - db-passwd
+    restart: always
     volumes:
       - /bpt/staging/db-data:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD_FILE: /run/secrets/db-passwd
       POSTGRES_DB: bpt_stage
-    restart: always
+    secrets:
+      - db-passwd
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
