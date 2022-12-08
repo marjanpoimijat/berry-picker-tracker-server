@@ -30,7 +30,7 @@ services:
       - /bpt/staging/db-data:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD_FILE: /run/secrets/db-passwd
-      POSTGRES_DB: bpt_stage
+      POSTGRES_DB: bpt
     secrets:
       - db-passwd
     healthcheck:
