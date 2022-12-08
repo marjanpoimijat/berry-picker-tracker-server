@@ -14,7 +14,7 @@ env_db_uri = os.environ.get("DATABASE_URI")
 engine = create_engine(
     env_db_uri
     if docker_db_passwd is None
-    else f"postgresql://postgres:{docker_db_passwd}@database/bpt"
+    else f"postgresql://postgres:{docker_db_passwd}@db/bpt"
 )
 
 # Create database session (given arguments for configurating session)
