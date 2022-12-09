@@ -14,6 +14,8 @@ from utilities.db import Base, engine
 load_dotenv()
 API_KEY = os.environ.get("NLS_API_KEY")
 LEGEND_URI = os.environ.get("LEGEND_URI")
+REV_NUMBER = os.environ.get("CODE_REVISION", "unknown")
+SERVER_ENV = os.environ.get("SERVER_ENVIRONMENT", "development")
 app = FastAPI()
 
 
@@ -31,6 +33,18 @@ def get_db():
 def redirect_root():
     """Root's warmest welcome"""
     return "G'day"
+
+
+@app.get("/server-version")
+def get_rev_number():
+    """Display the revision id and build date etc"""
+    is_dev = SERVER_ENV == "development"
+    details = (
+        "Local development"
+        if is_dev
+        else f"Code revision: {REV_NUMBER}\nRunning in {SERVER_ENV}"
+    )
+    return f"Berry Picker Tracker Server\n{details}"
 
 
 @app.get("/nlsapi/{z}/{y}/{x}")
