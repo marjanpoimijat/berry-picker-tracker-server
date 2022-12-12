@@ -32,7 +32,7 @@ DATABASE_URI=*local database address*
 ```
 This is only needed if you're connecting to database locally. Instructions to connect to database locally are [HERE](https://github.com/hy-ohtu-syksy-22-bpt/berry-picker-tracker-docs/blob/main/db_locally_instructions.md).
 
-As one can see from [DATABASE MODULE](https://github.com/hy-ohtu-syksy-22-bpt/berry-picker-tracker-server/blob/main/src/utilities/db.py), there is hard coded address for connecting to database which is run on virtual machine inside docker container (db password is acquired as a docker secret), but this is just original developer team's solution. For further development own solution should be implemented.
+As one can see from [DATABASE MODULE](https://github.com/hy-ohtu-syksy-22-bpt/berry-picker-tracker-server/blob/main/src/utilities/db.py#L17), there is hard coded address for connecting to database which is run on virtual machine inside docker container (db password is acquired as a docker secret), but this is just original developer team's solution. For further development own solution should be implemented.
 
 ```
 TEST_DATABASE_URI=sqlite:///test.db
