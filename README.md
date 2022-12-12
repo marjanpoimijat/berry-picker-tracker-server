@@ -25,7 +25,7 @@ touch .env                            # For environmental variables
 ```
 NLS_API_KEY=*API KEY*
 ```
-API key for getting map tiles from National Land Survey of Finland. Instructions for acquiring one can be found [HERE](https://www.maanmittauslaitos.fi/rajapinnat/api-avaimen-ohje). The right API is found from [HERE](https://www.maanmittauslaitos.fi/karttakuvapalvelu/tekninen-kuvaus-wmts#avoin-rajapintayhteys) but the right API is already hard coded in the application.
+API key for getting map tiles from National Land Survey of Finland. Instructions for acquiring one can be found [HERE](https://www.maanmittauslaitos.fi/rajapinnat/api-avaimen-ohje). The right API is found from [HERE](https://www.maanmittauslaitos.fi/karttakuvapalvelu/tekninen-kuvaus-wmts#avoin-rajapintayhteys) but it is already hard coded in the application.
 
 ```
 DATABASE_URI=*local database address*
