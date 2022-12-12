@@ -22,6 +22,9 @@ services:
         condition: service_healthy
     env_file:
       - ./.env
+    environment:
+      - CODE_REVISION
+      - SERVER_ENVIRONMENT
   db:
     image: postgres
     container_name: db-stage
