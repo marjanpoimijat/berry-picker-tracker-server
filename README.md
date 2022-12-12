@@ -42,7 +42,9 @@ For testing purposes SQLite is used instead of PostgreSQL.
 ```
 LEGEND_URI=*URI for downloading the map's legend*
 ```
-Downloading the map legend is done through back end server in case the URI is modified or changed under some other URI. The most recent (12.12.2022) working one is https://www.maanmittauslaitos.fi/sites/maanmittauslaitos.fi/files/attachments/2020/01/karttamerkkien_selitys.pdf
+Downloading the map legend is done through back end server in case the URI is modified or changed under some other URI. The most recent (12.12.2022) working one is:
+
+https://www.maanmittauslaitos.fi/sites/maanmittauslaitos.fi/files/attachments/2020/01/karttamerkkien_selitys.pdf
 
 
 ### Updating dependencies
