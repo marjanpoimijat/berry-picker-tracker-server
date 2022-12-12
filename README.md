@@ -19,7 +19,7 @@ touch .env                            # For environmental variables
 ```
 
 
-Instructions to set up environment variables check [HERE](https://github.com/hy-ohtu-syksy-22-bpt/berry-picker-tracker-docs/blob/main/db_locally_instructions.md#setting-up-environment-variables)
+Instructions to connect to database locally [HERE](https://github.com/hy-ohtu-syksy-22-bpt/berry-picker-tracker-docs/blob/main/db_locally_instructions.md#setting-up-environment-variables)
 
 
 ### Updating dependencies
