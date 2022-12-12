@@ -63,6 +63,8 @@ uvicorn --app-dir=src main:app --reload
 
 ### Testing
 
+Even though SQLite is used for testing database purposes, the PostgreSQL database must be running as well.
+
 Run tests
 
 ```bash
