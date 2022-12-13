@@ -17,6 +17,11 @@ pre-commit install && \               # Install the pre-commit hook
 pre-commit autoupdate && \            # Update the pre-commit hooks
 touch .env                            # For environmental variables
 ```
+### Database schema
+
+Database schema can be found [HERE](https://github.com/hy-ohtu-syksy-22-bpt/berry-picker-tracker-docs/blob/main/bpt_schema.png)
+
+If database is set up correctly, there's no need for any precautionary measures. Since **database's tables are created automatically upon running the program first time**.
 
 ### Environment variables
 
