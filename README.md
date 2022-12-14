@@ -89,3 +89,6 @@ python3 -m pytest
 ## Licenses
 
 [Licenses](https://github.com/hy-ohtu-syksy-22-bpt/berry-picker-tracker-server/tree/main/licenses)
+
+## General Information about the App
+[App Documentation](https://github.com/hy-ohtu-syksy-22-bpt/berry-picker-tracker-docs/blob/main/README.md)
