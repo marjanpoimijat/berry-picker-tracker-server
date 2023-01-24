@@ -14,7 +14,7 @@ import os
 #load_dotenv()
 
 #TEST_DATABASE_URI = os.environ.get("TEST_DATABASE_URI")
-TEST_DATABASE_URI=sqlite:///test.db
+TEST_DATABASE_URI="sqlite:///test.db"
 
 engine = create_engine(TEST_DATABASE_URI, connect_args={"check_same_thread": False})
 
