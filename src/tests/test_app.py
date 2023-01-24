@@ -11,7 +11,7 @@ import os
 from dotenv import load_dotenv
 
 
-load_dotenv()
+load_dotenv("./.env.test")
 
 TEST_DATABASE_URI = os.environ.get("TEST_DATABASE_URI")
 
