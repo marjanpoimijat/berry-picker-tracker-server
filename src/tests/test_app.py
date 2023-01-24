@@ -8,12 +8,13 @@ from utilities.db import Base
 from main import app, get_db
 
 import os
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 
 
-load_dotenv("./.env.test")
+#load_dotenv()
 
-TEST_DATABASE_URI = os.environ.get("TEST_DATABASE_URI")
+#TEST_DATABASE_URI = os.environ.get("TEST_DATABASE_URI")
+TEST_DATABASE_URI=sqlite:///test.db
 
 engine = create_engine(TEST_DATABASE_URI, connect_args={"check_same_thread": False})
 
