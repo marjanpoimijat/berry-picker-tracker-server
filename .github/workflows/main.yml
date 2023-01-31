@@ -36,7 +36,7 @@ jobs:
           python3 -m venv .venv
           source ./.venv/bin/activate
           pip install -U pip
-          pip install -r requirements.txt --use-pep517
+          pip install -r requirements.txt
           pre-commit install
           pre-commit autoupdate
           
