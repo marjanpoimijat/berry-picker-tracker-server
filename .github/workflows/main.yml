@@ -2,10 +2,46 @@ name: CI/CD
 
 on:
   push:
-    branches: [main]
+    branches:
+      - "main"
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    environment: test
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+           --health-cmd pg_isready
+           --health-interval 10s
+           --health-timeout 5s
+           --health-retries 5
+        ports:
+          - 5432:5432
+          
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v3
+
+      - name: "Set up Python"
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: "Install dependencies"
+        run: |
+          pip3 install -r requirements.txt
+          pre-commit install
+          pre-commit autoupdate
+      - name: "Connect to PostgreSQL"
+        run: uvicorn --app-dir=src main:app --reload
+      - name: "Test with pytest"
+        run: pytest
+        
   docker:
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout repo"
