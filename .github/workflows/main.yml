@@ -18,6 +18,7 @@ jobs:
       postgres:
         image: postgres
         env:
+          POSTGRES_DB: bpt
           POSTGRES_PASSWORD: postgres
         options: >-
            --health-cmd pg_isready
