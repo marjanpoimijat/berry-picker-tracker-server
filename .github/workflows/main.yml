@@ -51,6 +51,7 @@ jobs:
           source ./.venv/bin/activate
           uvicorn --app-dir=src main:app --reload
         timeout-minutes: 1
+        continue-on-error: true
         
       - name: "Test with pytest"
         run: pytest
