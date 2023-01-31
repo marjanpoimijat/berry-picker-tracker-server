@@ -8,7 +8,12 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    environment: test
+    env:
+      NLS_API_KEY: ${{ secrets.NLS_API_KEY }}
+      DATABASE_URI: ${{ vars.DATABASE_URI }}
+      LEGEND_URI: ${{ vars.LEGEND_URI }}
+      TEST_DATABASE_URI: ${{ vars.TEST_DATABASE_URI }}
+    
     services:
       postgres:
         image: postgres
