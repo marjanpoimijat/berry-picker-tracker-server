@@ -33,7 +33,7 @@ jobs:
       - name: "Install dependencies"
         run: |
           pip install -U pip
-          pip install -r requirements.txt
+          pip install -r requirements.txt --use-pep517
           pre-commit install
           pre-commit autoupdate
       - name: "Connect to PostgreSQL"
