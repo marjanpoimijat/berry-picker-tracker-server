@@ -41,9 +41,9 @@ jobs:
           pre-commit autoupdate
           
       - name: "Connect to PostgreSQL"
-        run: uvicorn |
+        run: |
           source ./.venv/bin/activate
-          --app-dir=src main:app --reload
+          uvicorn --app-dir=src main:app --reload
         
       - name: "Test with pytest"
         run: pytest
