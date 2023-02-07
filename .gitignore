@@ -133,6 +133,3 @@ dmypy.json
 
 # db-data
 db-data
-
-# Run script
-run.sh
