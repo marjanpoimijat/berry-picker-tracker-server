@@ -2,6 +2,9 @@
 
 ## Installation
 
+### Install script for frontend and backend in documentation
+[Install script documentation](https://github.com/marjanpoimijat/berry-picker-tracker-docs/blob/main/README.md#installation)
+
 ### Requirements
 
 - `python3`
