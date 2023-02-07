@@ -7,8 +7,6 @@ RUN apt-get update                                              && \
     pip3 install --no-cache-dir --upgrade -r ./requirements.txt && \
     rm -rf /var/lib/apt/lists/*
 
-EXPOSE 8080
-
 
 COPY src/ ./
 CMD [ "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80" ]
