@@ -32,7 +32,7 @@ def get_db():
 @app.get("/")
 def redirect_root():
     """Root's warmest welcome"""
-    return "Moi."
+    return "terve"
 
 
 @app.get("/server-version")
