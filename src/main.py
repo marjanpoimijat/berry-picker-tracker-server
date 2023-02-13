@@ -34,6 +34,10 @@ def redirect_root():
     """Root's warmest welcome"""
     return "terve"
 
+@app.get("/status")
+def get_status():
+    """Display the status of the server"""
+    return {"subject": "staging status", "status": "OK", "color": "green"}
 
 @app.get("/server-version")
 def get_rev_number():
