@@ -1,5 +1,9 @@
 # Berry Picker Tracker back-end server
 
+
+!\[status badge\](https://badgen.net/https/ohtup-staging.cs.helsinki.fi/bpt-stage/status)
+
+
 ## Installation
 
 ### Install script for frontend and backend in documentation
