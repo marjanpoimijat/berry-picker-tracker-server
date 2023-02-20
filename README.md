@@ -99,3 +99,4 @@ python3 -m pytest
 
 ## General Information about the App
 [App Documentation](https://github.com/marjanpoimijat/berry-picker-tracker-docs/blob/main/README.md)
+
