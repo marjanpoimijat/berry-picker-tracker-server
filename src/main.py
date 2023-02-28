@@ -34,10 +34,12 @@ def redirect_root():
     """Root's warmest welcome"""
     return "terve"
 
+
 @app.get("/status")
 def get_status():
     """Display the status of the server"""
     return {"subject": "staging status", "status": "OK", "color": "green"}
+
 
 @app.get("/server-version")
 def get_rev_number():
@@ -52,7 +54,7 @@ def get_rev_number():
 
 
 @app.get("/osmapi/{z}/{y}/{x}")
-def get_nls_tile(z, y, x):
+def get_osm_tile(z, y, x):
     url = "http://a.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png".format(
         z=z, y=y, x=x
     )
@@ -64,9 +66,35 @@ def get_nls_tile(z, y, x):
     raise HTTPException(status_code=404, detail="Image not found.")
 
 
-@app.get("/nlsapi/{z}/{y}/{x}")
+@app.get("/nlstopographic/{z}/{y}/{x}")
 def get_nls_tile(z, y, x):
     url = "https://avoin-karttakuva.maanmittauslaitos.fi/avoin/wmts/1.0.0/maastokartta/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.png".format(
+        z=z, y=y, x=x
+    )
+    response = requests.get(url, auth=(API_KEY, ""), stream=True)
+    if response.status_code == 200:
+        return Response(
+            content=response.content, media_type="image/png", status_code=200
+        )
+    raise HTTPException(status_code=404, detail="Image not found.")
+
+
+@app.get("/nlsplain/{z}/{y}/{x}")
+def get_nls_tile(z, y, x):
+    url = "https://avoin-karttakuva.maanmittauslaitos.fi/avoin/wmts/1.0.0/selkokartta/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.png".format(
+        z=z, y=y, x=x
+    )
+    response = requests.get(url, auth=(API_KEY, ""), stream=True)
+    if response.status_code == 200:
+        return Response(
+            content=response.content, media_type="image/png", status_code=200
+        )
+    raise HTTPException(status_code=404, detail="Image not found.")
+
+
+@app.get("/nlsaerial/{z}/{y}/{x}")
+def get_nls_tile(z, y, x):
+    url = "https://avoin-karttakuva.maanmittauslaitos.fi/avoin/wmts/1.0.0/ortokuva/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.jpg".format(
         z=z, y=y, x=x
     )
     response = requests.get(url, auth=(API_KEY, ""), stream=True)
