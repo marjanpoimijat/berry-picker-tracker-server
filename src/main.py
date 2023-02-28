@@ -67,7 +67,7 @@ def get_osm_tile(z, y, x):
 
 
 @app.get("/nlstopographic/{z}/{y}/{x}")
-def get_nls_tile(z, y, x):
+def get_nlsortographic_tile(z, y, x):
     url = "https://avoin-karttakuva.maanmittauslaitos.fi/avoin/wmts/1.0.0/maastokartta/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.png".format(
         z=z, y=y, x=x
     )
@@ -80,7 +80,7 @@ def get_nls_tile(z, y, x):
 
 
 @app.get("/nlsplain/{z}/{y}/{x}")
-def get_nls_tile(z, y, x):
+def get_nlsplain_tile(z, y, x):
     url = "https://avoin-karttakuva.maanmittauslaitos.fi/avoin/wmts/1.0.0/selkokartta/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.png".format(
         z=z, y=y, x=x
     )
@@ -93,7 +93,7 @@ def get_nls_tile(z, y, x):
 
 
 @app.get("/nlsaerial/{z}/{y}/{x}")
-def get_nls_tile(z, y, x):
+def get_nlsaerial_tile(z, y, x):
     url = "https://avoin-karttakuva.maanmittauslaitos.fi/avoin/wmts/1.0.0/ortokuva/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.jpg".format(
         z=z, y=y, x=x
     )
