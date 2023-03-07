@@ -8,14 +8,10 @@ from utilities.db import Base
 from main import app, get_db
 
 import os
-from dotenv import load_dotenv
 
+TEST_DATABASE_URI = os.getenv("TEST_DATABASE_URI")
 
-load_dotenv()
-
-TEST_DATABASE_URI = os.environ.get("TEST_DATABASE_URI")
-
-engine = create_engine(TEST_DATABASE_URI, connect_args={"check_same_thread": False})
+engine = create_engine(TEST_DATABASE_URI)
 
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
@@ -495,7 +491,4 @@ def test_delete_user():
     assert len(res_get_user.json()) == 0
 
 
-def test_remove_db():
-    os.remove("test.db")
-
-    assert os.path.exists("test.db") == False
+Base.metadata.drop_all(engine)

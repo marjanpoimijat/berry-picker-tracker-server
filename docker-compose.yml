@@ -11,6 +11,7 @@ services:
       - 8008:8000
     environment:
       - DATABASE_URL=postgresql://postgres:lakkahillo@db:5432/bpt
+      - TEST_DATABASE_URI=postgresql://postgres:lakkahillo@db:5432/postgres
     depends_on:
       - db
   db:

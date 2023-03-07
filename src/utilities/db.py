@@ -19,6 +19,7 @@ env_db_host = os.environ.get("DATABASE_HOST")
 env_db_port = os.environ.get("DATABASE_PORT")
 
 print(f"postgresql://{env_db_user}:{env_db_pass}@{env_db_host}:5432/{env_db_name}")
+print("docker_base_url: ", docker_db_url)
 engine = create_engine(docker_db_url)
 
 # Create database session (given arguments for configurating session)
