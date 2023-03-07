@@ -100,3 +100,19 @@ python3 -m pytest
 ## General Information about the App
 [App Documentation](https://github.com/marjanpoimijat/berry-picker-tracker-docs/blob/main/README.md)
 
+
+## Docker compose instructions
+
+Build and start container for app and database 
+
+```docker compose up -d --build```
+
+Run tests with 
+
+```docker exec berry-picker-tracker-server-web-1 pytest ./tests/ ```
+
+If you are restarting the container, use 
+
+``` docker compose down ```
+
+before building and starting containers again.
