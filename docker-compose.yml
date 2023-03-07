@@ -1,40 +1,29 @@
-secrets:
-  db-passwd:
-    file: .secrets/db-passwd
-networks:
-  default:
-    name: prod-net
-    external: true
+
+version: '3.8'
 
 services:
-  app:
+  web:
     build: .
-    image: bpt-server:latest
-    container_name: bpt-prod
-    networks:
-      default:
-        aliases:
-          - app-prod
-    secrets:
-      - db-passwd
-    depends_on:
-      db:
-        condition: service_healthy
-    env_file:
-      - ./.env
-  db:
-    image: postgres
-    container_name: db-prod
-    restart: always
+    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; uvicorn main:app --host 0.0.0.0'
     volumes:
-      - /bpt/production/db-data:/var/lib/postgresql/data
+      - .:/app
+    ports:
+      - 8008:8000
     environment:
-      POSTGRES_PASSWORD_FILE: /run/secrets/db-passwd
-      POSTGRES_DB: bpt
-    secrets:
-      - db-passwd
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+      - DATABASE_URL=postgresql://postgres:lakkahillo@db:5432/bpt
+      - TEST_DATABASE_URI=postgresql://postgres:lakkahillo@db:5432/postgres
+    depends_on:
+      - db
+  db:
+    image: postgres:15-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=lakkahillo
+      - POSTGRES_DB=bpt
+
+volumes:
+  postgres_data:

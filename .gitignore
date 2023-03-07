@@ -133,3 +133,5 @@ dmypy.json
 
 # db-data
 db-data
+
+.dockerignore
