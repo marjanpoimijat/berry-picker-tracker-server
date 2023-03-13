@@ -109,14 +109,20 @@ Add NLS API key to docker compose file under "enviroment" as
 
 Build and start container for app and database 
 
+
   docker compose up -d --build
+  
 
 Run tests with 
 
+
   docker exec berry-picker-tracker-server-web-1 pytest ./tests/
+  
 
 If you are restarting the container, use 
 
+
   docker compose down
+  
 
 before building and starting containers again.
