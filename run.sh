@@ -1,11 +1,11 @@
 # Clear the terminal
 clear
 
-# Start the database
-postgres &
+# Terminate previous instances
+sudo docker compose down
 
-# Activate the virtual environment
-source .venv/bin/activate
+# Start the server locally
+sudo docker compose up -d --build
 
-# Start the server
-uvicorn --app-dir=src main:app --reload
+# Show the logs
+sudo docker logs -f berry-picker-tracker-server-web-1
