@@ -103,16 +103,20 @@ python3 -m pytest
 
 ## Docker compose instructions
 
+Add NLS API key to docker compose file under "enviroment" as 
+
+- NLS_API_KEY= (api key)
+
 Build and start container for app and database 
 
-```docker compose up -d --build```
+  docker compose up -d --build
 
 Run tests with 
 
-```docker exec berry-picker-tracker-server-web-1 pytest ./tests/ ```
+  docker exec berry-picker-tracker-server-web-1 pytest ./tests/
 
 If you are restarting the container, use 
 
-``` docker compose down ```
+  docker compose down
 
 before building and starting containers again.
