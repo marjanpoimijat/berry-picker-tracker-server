@@ -14,6 +14,15 @@
 - `python3`
 - `pip3`
 
+
+### Using Docker during development
+1. [Install Docker](https://docs.docker.com/get-docker/)
+2. add your API key to the enviroment section in the docker compose as NLS_API_KEY
+3. use `docker compose up -d --build` to build and launch the containers
+4. use `docker exec berry-picker-tracker-server-web-1 pytest ./tests/` to run tests
+5. use `docker logs -f berry-picker-tracker-server-web-1`to view and follow backend logs
+6. To connect to the backend server while using the emulator, set your URI in the frontend .env to http://10.0.2.2:8008
+
 ## Set-up
 
 ```bash
@@ -100,28 +109,3 @@ python3 -m pytest
 ## General Information about the App
 [App Documentation](https://github.com/marjanpoimijat/berry-picker-tracker-docs/blob/main/README.md)
 
-
-## Docker compose instructions
-
-Add NLS API key to docker compose file under "enviroment" as 
-
-- NLS_API_KEY= (api key)
-
-Build and start container for app and database 
-
-```
-  docker compose up -d --build
- ```
-
-Run tests with 
-```
-  docker exec berry-picker-tracker-server-web-1 pytest ./tests/
-```
-
-If you are restarting the container, use 
-
-```
-  docker compose down
- ```
-
-before building and starting containers again.
