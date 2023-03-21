@@ -20,30 +20,29 @@ jobs:
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
-         with:
-                  aws-region: ${{ env.REGION }}
-                  role-to-assume: arn:aws:iam::123456789100:role/[KONFIGUROI ROOLI]
-                  role-session-name: GithubActions
+        with:
+            aws-region: ${{ env.REGION }}
+            role-to-assume: arn:aws:iam::123456789100:role/[KONFIGUROI ROOLI]
+            role-session-name: GithubActions
+      - name: Login to ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
 
-       - name: Login to ECR
-         id: login-ecr
-         uses: aws-actions/amazon-ecr-login@v1
-
-       - name: Build, tag and push docker image
-         id: build-image
-         env:
+      - name: Build, tag and push docker image
+        id: build-image
+        env:
            REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
            IMAGE_TAG: ${{ github.sha }}
 
-         run: |
+        run: |
            docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
            docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
            echo "image=$REGISTRY/$REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
            
-       - name: Update AWS Lambda function code
-         id: update-function
-         env:
+      - name: Update AWS Lambda function code
+        id: update-function
+        env:
            IMAGE_URI: ${{ steps.build-image.outputs.image }}
 
-         run: |
+        run: |
            aws lambda update-function-code --function-name [TÄHÄN FUNKTION NIMI] --image-uri $IMAGE_URI
