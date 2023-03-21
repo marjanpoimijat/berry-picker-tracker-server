@@ -21,8 +21,8 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-            aws-region: ${{ env.REGION }}
-            role-to-assume: arn:aws:iam::123456789100:role/[KONFIGUROI ROOLI]
+            aws-region: eu-north-1
+            role-to-assume: arn:aws:iam::441786643223:role/GithubActionsBPT
             role-session-name: GithubActions
       - name: Login to ECR
         id: login-ecr
@@ -45,4 +45,4 @@ jobs:
            IMAGE_URI: ${{ steps.build-image.outputs.image }}
 
         run: |
-           aws lambda update-function-code --function-name [TÄHÄN FUNKTION NIMI] --image-uri $IMAGE_URI
+           aws lambda update-function-code --function-name bptwithnoserver --image-uri $IMAGE_URI
