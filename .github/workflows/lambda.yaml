@@ -8,13 +8,16 @@ on:
 env:
   REGION: AWS_REGION
   REPOSITORY: ECR_REPOSITORY
-
+permissions:
+      id-token: write
+      contents: read  
 jobs:
   deploy:
     name: Deploy to AWS Lambda
     runs-on: ubuntu-latest
 
     steps:
+    
       - name: Checkout
         uses: actions/checkout@v3
 
