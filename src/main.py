@@ -15,6 +15,8 @@ from utilities.db import Base, engine
 load_dotenv()
 API_KEY = os.environ.get("NLS_API_KEY")
 LEGEND_URI = os.environ.get("LEGEND_URI")
+REV_NUMBER = os.environ.get("CODE_REVISION", "unknown")
+SERVER_ENV = os.environ.get("SERVER_ENVIRONMENT", "development")
 app = FastAPI()
 handler = Mangum(app)
 
@@ -35,12 +37,12 @@ def redirect_root():
     return "terve"
 
 
-@app.get("/status")
+@app.get("/status/?")
 def get_status():
     """Display the status of the server"""
     return {"subject": "staging status", "status": "OK", "color": "green"}
 
-@app.get("/nlstopographic/{z}/{y}/{x}")
+@app.get("/nlstopographic/{z}/{y}/{x}/?")
 def get_nlsortographic_tile(z, y, x):
     url = "https://avoin-karttakuva.maanmittauslaitos.fi/avoin/wmts/1.0.0/maastokartta/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.png".format(
         z=z, y=y, x=x
@@ -53,7 +55,7 @@ def get_nlsortographic_tile(z, y, x):
     raise HTTPException(status_code=404, detail="Image not found.")
 
 
-@app.get("/nlsplain/{z}/{y}/{x}")
+@app.get("/nlsplain/{z}/{y}/{x}/?")
 def get_nlsplain_tile(z, y, x):
     url = "https://avoin-karttakuva.maanmittauslaitos.fi/avoin/wmts/1.0.0/selkokartta/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.png".format(
         z=z, y=y, x=x
@@ -66,7 +68,7 @@ def get_nlsplain_tile(z, y, x):
     raise HTTPException(status_code=404, detail="Image not found.")
 
 
-@app.get("/nlsaerial/{z}/{y}/{x}")
+@app.get("/nlsaerial/{z}/{y}/{x}/?")
 def get_nlsaerial_tile(z, y, x):
     url = "https://avoin-karttakuva.maanmittauslaitos.fi/avoin/wmts/1.0.0/ortokuva/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.jpg".format(
         z=z, y=y, x=x
@@ -79,13 +81,13 @@ def get_nlsaerial_tile(z, y, x):
     raise HTTPException(status_code=404, detail="Image not found.")
 
 
-@app.post("/new-user/")
+@app.post("/new-user/?")
 def create_new_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     """Create new user session"""
     return crud.create_user(user, db)
 
 
-@app.post("/start-route/")
+@app.post("/start-route/?")
 def create_new_route(route: schemas.RouteCreate, db: Session = Depends(get_db)):
     """Create a new route for the user given in route object"""
     db_route = crud.create_new_route(route, db)
@@ -98,7 +100,7 @@ def create_new_route(route: schemas.RouteCreate, db: Session = Depends(get_db)):
     return db_route
 
 
-@app.post("/create-waypoint/")
+@app.post("/create-waypoint/?")
 def create_new_waypoint(
     waypoints: List[schemas.WaypointCreate], db: Session = Depends(get_db)
 ):
@@ -106,25 +108,25 @@ def create_new_waypoint(
     return crud.create_new_waypoint(waypoints, db)
 
 
-@app.get("/get-user/")
+@app.get("/get-user/?")
 def get_user(user_id: str = Header(), db: Session = Depends(get_db)):
     """Get user by user_id, provides user_id via custom header"""
     return crud.get_user_by_id(user_id, db)
 
 
-@app.get("/get-route/")
+@app.get("/get-route/?")
 def get_route(route_id: str = Header(), db: Session = Depends(get_db)):
     """Get user by route_id, provides route_id via custom header"""
     return crud.get_route_by_id(route_id, db)
 
 
-@app.get("/get-user-routes/")
+@app.get("/get-user-routes/?")
 def get_users_route(user_id: str = Header(), db: Session = Depends(get_db)):
     """Get user's route by user_id, provides user_id via custom header"""
     return crud.get_users_routes(user_id, db)
 
 
-@app.get("/get-users-latest-route/")
+@app.get("/get-users-latest-route/?")
 def get_user_latest_route(user_id: str = Header(), db: Session = Depends(get_db)):
     """Get user's latest route, regardless of it being active or not"""
     waypoints = crud.get_users_latest_route(user_id, db)
@@ -134,31 +136,32 @@ def get_user_latest_route(user_id: str = Header(), db: Session = Depends(get_db)
 
     return crud.get_users_latest_route(user_id, db)
 
-@app.get("/get-route-waypoints/")
+
+@app.get("/get-route-waypoints/?")
 def get_routes_waypoints(route_id: str = Header(), db: Session = Depends(get_db)):
     """Get routes waypoints by route_id, provides route_id via custom header"""
     return crud.get_routes_waypoints(route_id, db)
 
 
-@app.patch("/deactivate-route/")
+@app.patch("/deactivate-route/?")
 def deactivate_route(route_id: str = Header(), db: Session = Depends(get_db)):
     """Deactivate route (change 'active' column -> false), provides route_id via custom header"""
     return crud.deactivate_route(route_id, db)
 
 
-@app.delete("/delete-user/")
+@app.delete("/delete-user/?")
 def delete_user(user_id: str = Header(), db: Session = Depends(get_db)):
     """Delete user by id, provides user_id via custom header"""
     return crud.delete_user(user_id, db)
 
 
-@app.delete("/delete-route/")
+@app.delete("/delete-route/?")
 def delete_route(route_id: str = Header(), db: Session = Depends(get_db)):
     """Delete route by id, provides route_id via header"""
     return crud.delete_route(route_id, db)
 
 
-@app.get("/get-legend/")
+@app.get("/get-legend/?")
 def get_legend():
     print(LEGEND_URI)
     return RedirectResponse(LEGEND_URI)
