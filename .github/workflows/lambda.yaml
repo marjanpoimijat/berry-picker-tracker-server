@@ -35,7 +35,8 @@ jobs:
            REPOSITORY: berrypicker
            IMAGE_TAG: latest
         run: |
-           docker build . -t $REPOSITORY:$IMAGE_TAG -f docker/prod/Dockerfile
+           docker build . -t $REPOSITORY -f docker/prod/Dockerfile
+           docker tag $REGISTRY:latest $REGISTRY/$REPOSITORY:$IMAGE_TAG 
            docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
            echo "image=$REGISTRY/$REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
            
