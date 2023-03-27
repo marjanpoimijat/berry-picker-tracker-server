@@ -15,8 +15,6 @@ from utilities.db import Base, engine
 load_dotenv()
 API_KEY = os.environ.get("NLS_API_KEY")
 LEGEND_URI = os.environ.get("LEGEND_URI")
-REV_NUMBER = os.environ.get("CODE_REVISION", "unknown")
-SERVER_ENV = os.environ.get("SERVER_ENVIRONMENT", "development")
 app = FastAPI()
 handler = Mangum(app)
 
@@ -41,32 +39,6 @@ def redirect_root():
 def get_status():
     """Display the status of the server"""
     return {"subject": "staging status", "status": "OK", "color": "green"}
-
-
-@app.get("/server-version")
-def get_rev_number():
-    """Display the revision id and build date etc"""
-    is_dev = SERVER_ENV == "development"
-    details = (
-        "Local development"
-        if is_dev
-        else f"Code revision: {REV_NUMBER}\nRunning in {SERVER_ENV}"
-    )
-    return f"Berry Picker Tracker Server\n{details}"
-
-
-@app.get("/osmapi/{z}/{y}/{x}")
-def get_osm_tile(z, y, x):
-    url = "http://a.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png".format(
-        z=z, y=y, x=x
-    )
-    response = requests.get(url, stream=True)
-    if response.status_code == 200:
-        return Response(
-            content=response.content, media_type="image/png", status_code=200
-        )
-    raise HTTPException(status_code=404, detail="Image not found.")
-
 
 @app.get("/nlstopographic/{z}/{y}/{x}")
 def get_nlsortographic_tile(z, y, x):
@@ -161,7 +133,6 @@ def get_user_latest_route(user_id: str = Header(), db: Session = Depends(get_db)
         raise HTTPException(status_code=404, detail="User or no routes found")
 
     return crud.get_users_latest_route(user_id, db)
-
 
 @app.get("/get-route-waypoints/")
 def get_routes_waypoints(route_id: str = Header(), db: Session = Depends(get_db)):
