@@ -122,3 +122,4 @@ $ python3 -m pytest
 ## Licenses
 
 [Licenses](https://github.com/marjanpoimijat/berry-picker-tracker-server/tree/main/licenses)
+
