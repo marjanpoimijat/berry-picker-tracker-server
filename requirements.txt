@@ -57,3 +57,4 @@ watchfiles==0.16.1
 watchgod==0.8.2
 wcwidth==0.2.5
 websockets==10.3
+mangum==0.15.0

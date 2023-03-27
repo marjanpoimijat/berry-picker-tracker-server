@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 from fastapi import FastAPI, Response, HTTPException, Depends, Header
 from fastapi.responses import RedirectResponse
+from mangum import Mangum
 from typing import List
 from sqlalchemy.orm import Session
 
@@ -17,6 +18,7 @@ LEGEND_URI = os.environ.get("LEGEND_URI")
 REV_NUMBER = os.environ.get("CODE_REVISION", "unknown")
 SERVER_ENV = os.environ.get("SERVER_ENVIRONMENT", "development")
 app = FastAPI()
+handler = Mangum(app)
 
 
 def get_db():
