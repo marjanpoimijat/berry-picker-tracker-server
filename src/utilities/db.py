@@ -8,9 +8,9 @@ from sqlalchemy.ext.declarative import declarative_base
 
 load_dotenv()
 
-docker_db_passwd = get_docker_secret("db-passwd")
 docker_db_url = os.getenv("DATABASE_URL")
-env_db_uri = os.environ.get("DATABASE_URI")
+if docker_db_url is None:
+    docker_db_url = os.environ.get("DATABASE_URI")
 
 env_db_name = os.environ.get("DATABASE_NAME")
 env_db_user = os.environ.get("DATABASE_USER")
@@ -18,8 +18,6 @@ env_db_pass = os.environ.get("DATABASE_PASS")
 env_db_host = os.environ.get("DATABASE_HOST")
 env_db_port = os.environ.get("DATABASE_PORT")
 
-print(f"postgresql://{env_db_user}:{env_db_pass}@{env_db_host}:5432/{env_db_name}")
-print("docker_base_url: ", docker_db_url)
 engine = create_engine(docker_db_url)
 
 # Create database session (given arguments for configurating session)
