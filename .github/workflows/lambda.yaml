@@ -37,7 +37,7 @@ jobs:
         run: |
            docker build . -t $REPOSITORY -f docker/prod/Dockerfile
            docker image ls -a
-           docker tag $IMAGE_TAG ${{ secrets.ECR_REPOSITORY_URI }}
+           docker tag $REPOSITORY ${{ secrets.ECR_REPOSITORY_URI }}
            docker image ls -a
            docker push ${{ secrets.ECR_REPOSITORY_URI }}
            echo "image=$REGISTRY/$REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
