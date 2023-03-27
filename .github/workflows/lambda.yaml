@@ -36,6 +36,7 @@ jobs:
            IMAGE_TAG: latest
         run: |
            docker build . -t $REPOSITORY -f docker/prod/Dockerfile
+           echo docker image ls -a
            docker tag $REGISTRY:latest ${{  secrets.ECR_REPOSITORY_URI }}
            docker push ${{ secrets.ECR_REPOSITORY_URI }}
            echo "image=$REGISTRY/$REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
