@@ -45,7 +45,7 @@ jobs:
       - name: Update AWS Lambda function code
         id: update-function
         env:
-           IMAGE_URI: ${{ steps.build-image.outputs.image }}
+           IMAGE_URI: ${{ secrets.ECR_REPOSITORY_URI }}
 
         run: |
            aws lambda update-function-code --function-name bptwithnoserver --image-uri $IMAGE_URI
