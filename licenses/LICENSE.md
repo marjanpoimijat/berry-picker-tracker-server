@@ -1,6 +1,7 @@
 MIT License
 
-Copyright (c) 2022 Riku Brandt, Topias Harjunpää, Anna Kangasmaa, Emma Koskinen, Sampo Kääriäinen, Santeri Salonen
+Copyright (c) 2022 Riku Brandt, Topias Harjunpää, Anna Kangasmaa, Emma Koskinen, Sampo Kääriäinen, Santeri Salonen  
+Copyright (c) 2023 Alexander Engelhardt, Jenni Halkola, Jyri Kangas, Janne Kärki, Riku Rauhala, Mikael Slotboom, Samu Syrjänen
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

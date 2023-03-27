@@ -480,6 +480,11 @@ def test_delete_user():
     assert res_get_user.status_code == 200
     assert len(res_get_user.json()) == 1
 
+    res_get_routes = client.get("/get-user-routes", headers={"user-id": user_id})
+
+    assert res_get_routes.status_code == 200
+    assert len(res_get_routes.json()) == 2
+
     res_delete_user = client.delete("/delete-user/", headers={"user-id": user_id})
 
     assert res_delete_user.status_code == 200
@@ -489,6 +494,11 @@ def test_delete_user():
 
     assert res_get_user.status_code == 200
     assert len(res_get_user.json()) == 0
+
+    res_get_routes = client.get("/get-user-routes", headers={"user-id": user_id})
+
+    assert res_get_routes.status_code == 200
+    assert len(res_get_routes.json()) == 0
 
 
 Base.metadata.drop_all(engine)
