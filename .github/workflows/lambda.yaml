@@ -34,7 +34,6 @@ jobs:
            REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
            REPOSITORY: berrypicker
            IMAGE_TAG: latest
-
         run: |
            docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
            docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
