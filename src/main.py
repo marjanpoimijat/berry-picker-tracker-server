@@ -14,6 +14,8 @@ from utilities.db import Base, engine
 
 load_dotenv()
 API_KEY = os.environ.get("NLS_API_KEY")
+if API_KEY is None:
+    API_KEY = os.getenv("NLS_API_KEY")
 LEGEND_URI = os.environ.get("LEGEND_URI")
 REV_NUMBER = os.environ.get("CODE_REVISION", "unknown")
 SERVER_ENV = os.environ.get("SERVER_ENVIRONMENT", "development")
