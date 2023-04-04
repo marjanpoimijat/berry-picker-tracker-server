@@ -10,6 +10,8 @@ from main import app, get_db
 import os
 
 TEST_DATABASE_URI = os.getenv("TEST_DATABASE_URI")
+if TEST_DATABASE_URI is None:
+    TEST_DATABASE_URI='postgresql://postgres:lakkahillo@db:5432/postgres'
 
 engine = create_engine(TEST_DATABASE_URI)
 
