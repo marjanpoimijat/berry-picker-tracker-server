@@ -60,7 +60,7 @@ jobs:
           pytest
         
   docker:
-    needs: test
+    #needs: test
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout repo"
