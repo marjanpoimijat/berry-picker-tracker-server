@@ -6,7 +6,7 @@ services:
     build: 
       context: ../../
       dockerfile: ./docker/dev/Dockerfile
-    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; pytest'
+    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done;'
     ports:
       - 8008:8000
     environment:
