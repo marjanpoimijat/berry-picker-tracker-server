@@ -11,8 +11,6 @@ load_dotenv()
 docker_db_url = os.getenv("DATABASE_URL")
 if docker_db_url is None:
     docker_db_url = os.environ.get("DATABASE_URI")
-if docker_db_url is None:
-    docker_db_url = 'postgresql://postgres:lakkahillo@db:5432/bpt'
 env_db_name = os.environ.get("DATABASE_NAME")
 env_db_user = os.environ.get("DATABASE_USER")
 env_db_pass = os.environ.get("DATABASE_PASS")
