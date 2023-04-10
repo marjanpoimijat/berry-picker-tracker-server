@@ -13,7 +13,7 @@ jobs:
       NLS_API_KEY: ${{ secrets.NLS_API_KEY }}
       DATABASE_URI: ${{ vars.DATABASE_URI }}
       LEGEND_URI: ${{ vars.LEGEND_URI }}
-      TEST_DATABASE_URI: postgresql://postgres:postgres@db:5432/bpt
+      TEST_DATABASE_URI: postgresql://postgres:postgres@localhost:5432/bpt
 
     services:
       postgres:
@@ -47,12 +47,12 @@ jobs:
           pre-commit install
           pre-commit autoupdate
           
-      - name: "Connect to PostgreSQL"
-        run: |
-          source ./.venv/bin/activate
-          uvicorn --app-dir=src main:app --reload
-        timeout-minutes: 1
-        continue-on-error: true
+    #  - name: "Connect to PostgreSQL"
+    #    run: |
+    #      source ./.venv/bin/activate
+    #      uvicorn --app-dir=src main:app --reload
+    #    timeout-minutes: 1
+    #    continue-on-error: true
 
       - name: "Test with pytest"
         run: |
