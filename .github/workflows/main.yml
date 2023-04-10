@@ -15,11 +15,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       
-      - name: Build container
-        run: docker-compose build
-      
+      - name: Spin up containers
+        run: docker-compose up -d
       - name: Run tests
-        run: docker-compose up
+        run: docker exec -t ci-web-1 pytest
 #  test:
 #    runs-on: ubuntu-latest
 #    env:
