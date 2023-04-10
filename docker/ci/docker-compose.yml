@@ -23,3 +23,7 @@ services:
       - POSTGRES_PASSWORD=lakkahillo
       - POSTGRES_DB=bpt
 
+networks:
+  default:
+    external:
+      name: bpt 
