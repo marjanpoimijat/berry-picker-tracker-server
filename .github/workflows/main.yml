@@ -19,7 +19,7 @@ jobs:
         run: docker-compose build
       
       - name: Run tests
-        run: docker-compose run test
+        run: docker-compose up
 #  test:
 #    runs-on: ubuntu-latest
 #    env:
