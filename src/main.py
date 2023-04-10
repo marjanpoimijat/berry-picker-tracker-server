@@ -17,9 +17,9 @@ API_KEY = os.environ.get("NLS_API_KEY")
 if API_KEY is None:
     API_KEY = os.getenv("NLS_API_KEY")
 LEGEND_URI = os.environ.get("LEGEND_URI")
-REV_NUMBER = os.environ.get("CODE_REVISION", "unknown")
-SERVER_ENV = os.environ.get("SERVER_ENVIRONMENT", "development")
 app = FastAPI()
+
+# For AWS Lambda
 handler = Mangum(app)
 
 
@@ -44,6 +44,7 @@ def get_status():
     """Display the status of the server"""
     return {"subject": "staging status", "status": "OK", "color": "green"}
 
+#for testing purposes only
 @app.get("/osmapi/{z}/{y}/{x}")
 def get_nls_tile(z, y, x):
     print("osmapi handler called")
