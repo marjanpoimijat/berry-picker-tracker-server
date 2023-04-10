@@ -7,78 +7,92 @@ on:
       - "main"
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    env:
-      NLS_API_KEY: ${{ secrets.NLS_API_KEY }}
-      DATABASE_URI: ${{ vars.DATABASE_URI }}
-      LEGEND_URI: ${{ vars.LEGEND_URI }}
-      TEST_DATABASE_URI: postgresql://postgres:postgres@localhost:5432/bpt
-
-    services:
-      postgres:
-        image: postgres
-        env:
-          POSTGRES_DB: bpt
-          POSTGRES_PASSWORD: postgres
-        options: >-
-           --health-cmd pg_isready
-           --health-interval 10s
-           --health-timeout 5s
-           --health-retries 5
-        ports:
-          - 5432:5432
-
-    steps:
-      - name: "Checkout repository"
-        uses: actions/checkout@v3
-
-      - name: "Set up Python"
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-
-      - name: "Install dependencies"
-        run: |
-          python3 -m venv .venv
-          source ./.venv/bin/activate
-          pip install -U pip
-          pip install -r requirements.txt
-          pre-commit install
-          pre-commit autoupdate
-          
-    #  - name: "Connect to PostgreSQL"
-    #    run: |
-    #      source ./.venv/bin/activate
-    #      uvicorn --app-dir=src main:app --reload
-    #    timeout-minutes: 1
-    #    continue-on-error: true
-
-      - name: "Test with pytest"
-        run: |
-          source ./.venv/bin/activate
-          pytest
+    test:
+      runs-on: ubuntu-latest
+      env:
+        COMPOSE_FILE: .ci/docker-compose.yml
+      steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Build container
+        run: docker-compose build
+      
+      - name: Run tests
+        run: docker-compose run test
+#  test:
+#    runs-on: ubuntu-latest
+#    env:
+#      NLS_API_KEY: ${{ secrets.NLS_API_KEY }}
+#      DATABASE_URI: ${{ vars.DATABASE_URI }}
+#      LEGEND_URI: ${{ vars.LEGEND_URI }}
+#      TEST_DATABASE_URI: postgresql://postgres:postgres@localhost:5432/bpt
+#
+#    services:
+#      postgres:
+#        image: postgres
+#        env:
+#          POSTGRES_DB: bpt
+#          POSTGRES_PASSWORD: postgres
+#        options: >-
+#           --health-cmd pg_isready
+#           --health-interval 10s
+#           --health-timeout 5s
+#           --health-retries 5
+#        ports:
+#          - 5432:5432
+#
+#    steps:
+#      - name: "Checkout repository"
+#        uses: actions/checkout@v3
+#
+#      - name: "Set up Python"
+#        uses: actions/setup-python@v4
+#        with:
+#          python-version: '3.9'
+#
+#      - name: "Install dependencies"
+#        run: |
+#          python3 -m venv .venv
+#          source ./.venv/bin/activate
+#          pip install -U pip
+#          pip install -r requirements.txt
+#          pre-commit install
+#          pre-commit autoupdate
+#          
+#    #  - name: "Connect to PostgreSQL"
+#    #    run: |
+#    #      source ./.venv/bin/activate
+#    #      uvicorn --app-dir=src main:app --reload
+#    #    timeout-minutes: 1
+#    #    continue-on-error: true
+#
+#      - name: "Test with pytest"
+#        run: |
+#          source ./.venv/bin/activate
+#          pytest
         
-  docker:
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - name: "Checkout repo"
-        uses: actions/checkout@v3
-
-      - name: "Login to Dockerhub"
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: "Set up Docker Buildx"
-        uses: docker/setup-buildx-action@v2
-
-      - name: "Build and push"
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          file: ./docker/dev/Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bpt-server:latest
+    docker:
+      needs: test
+      runs-on: ubuntu-latest
+      steps:
+        - name: "Checkout repo"
+          uses: actions/checkout@v3
+  
+        - name: "Login to Dockerhub"
+          uses: docker/login-action@v2
+          with:
+            username: ${{ secrets.DOCKERHUB_USERNAME }}
+            password: ${{ secrets.DOCKERHUB_TOKEN }}
+  
+        - name: "Set up Docker Buildx"
+          uses: docker/setup-buildx-action@v2
+  
+        - name: "Build and push"
+          uses: docker/build-push-action@v3
+          with:
+            context: .
+            file: ./docker/dev/Dockerfile
+            push: true
+            tags: ${{ secrets.DOCKERHUB_USERNAME }}/bpt-server:latest
+  
