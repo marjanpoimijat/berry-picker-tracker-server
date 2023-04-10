@@ -13,7 +13,7 @@ jobs:
       NLS_API_KEY: ${{ secrets.NLS_API_KEY }}
       DATABASE_URI: ${{ vars.DATABASE_URI }}
       LEGEND_URI: ${{ vars.LEGEND_URI }}
-      TEST_DATABASE_URI: ${{ vars.TEST_DATABASE_URI }}
+      TEST_DATABASE_URI: postgresql://postgres:postgres@db:5432/bpt
 
     services:
       postgres:
@@ -60,7 +60,7 @@ jobs:
           pytest
         
   docker:
-    #needs: test
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout repo"
