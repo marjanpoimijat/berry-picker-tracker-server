@@ -18,7 +18,7 @@ jobs:
       - name: Spin up containers
         run: docker compose up -d
       - name: Run tests
-        run: docker exec -it ci-web-1 pytest
+        run: docker exec -t ci-web-1 pytest
 #  test:
 #    runs-on: ubuntu-latest
 #    env:
