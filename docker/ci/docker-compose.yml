@@ -1,0 +1,25 @@
+
+version: '3.8'
+
+services:
+  web:
+    build: 
+      context: ../../
+      dockerfile: ./docker/dev/Dockerfile
+    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; pytest'
+    ports:
+      - 8008:8000
+    environment:
+      - DATABASE_URL=postgresql://postgres:lakkahillo@db:5432/bpt
+      - TEST_DATABASE_URI=postgresql://postgres:lakkahillo@db:5432/postgres
+    depends_on:
+      - db
+  db:
+    image: postgres:15-alpine
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=lakkahillo
+      - POSTGRES_DB=bpt
+
