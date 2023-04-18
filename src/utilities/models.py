@@ -40,8 +40,8 @@ class Waypoint(Base):
     route_id = Column(
         String, ForeignKey("routes.id", ondelete="CASCADE"), nullable=False
     )
-    latitude = Column(String, nullable=False)
-    longitude = Column(String, nullable=False)
+    latitude = Column(Float, nullable=False)
+    longitude = Column(Float, nullable=False)
     mnc = Column(Integer, nullable=True)
     ts = Column(DateTime)
     connection = Column(String, nullable=True)
