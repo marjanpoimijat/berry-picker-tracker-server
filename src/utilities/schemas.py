@@ -23,8 +23,8 @@ class WaypointBase(BaseModel):
     """Common attributes for Waypoint objects"""
 
     route_id: str
-    latitude: float
-    longitude: float
+    latitude: str
+    longitude: str
     mnc: int = Field(None, description="No MNC code")
     ts: datetime = Field(default_factory=get_timestamp)
     connection: Optional[str] = Field(None, description="No connection")
