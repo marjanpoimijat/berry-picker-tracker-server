@@ -181,8 +181,8 @@ def test_create_waypoints_to_route_and_get_routes_waypoints():
         json=[
             {
                 "route_id": route_id,
-                "latitude": 1.0,
-                "longitude": 1.0,
+                "latitude": "1.0",
+                "longitude": "1.0",
                 "mnc": 200,
                 "connection": "1g",
             }
@@ -190,8 +190,8 @@ def test_create_waypoints_to_route_and_get_routes_waypoints():
     )
 
     assert res_post_coord.status_code == 200
-    assert res_post_coord.json()[0]["latitude"] == 1.0
-    assert res_post_coord.json()[0]["longitude"] == 1.0
+    assert res_post_coord.json()[0]["latitude"] == "1.0"
+    assert res_post_coord.json()[0]["longitude"] == "1.0"
     assert res_post_coord.json()[0]["connection"] == "1g"
 
     time.sleep(1)
@@ -201,16 +201,16 @@ def test_create_waypoints_to_route_and_get_routes_waypoints():
         json=[
             {
                 "route_id": route_id,
-                "latitude": 1.1,
-                "longitude": 1.1,
+                "latitude": "1.1",
+                "longitude": "1.1",
                 "mnc": 200,
                 "connection": "2g",
             }
         ],
     )
     assert res_post_coord.status_code == 200
-    assert res_post_coord.json()[0]["latitude"] == 1.1
-    assert res_post_coord.json()[0]["longitude"] == 1.1
+    assert res_post_coord.json()[0]["latitude"] == "1.1"
+    assert res_post_coord.json()[0]["longitude"] == "1.1"
     assert res_post_coord.json()[0]["connection"] == "2g"
 
     time.sleep(1)
@@ -220,16 +220,16 @@ def test_create_waypoints_to_route_and_get_routes_waypoints():
         json=[
             {
                 "route_id": route_id,
-                "latitude": 1.2,
-                "longitude": 1.2,
+                "latitude": "1.2",
+                "longitude": "1.2",
                 "mnc": 200,
                 "connection": "3g",
             }
         ],
     )
     assert res_post_coord.status_code == 200
-    assert res_post_coord.json()[0]["latitude"] == 1.2
-    assert res_post_coord.json()[0]["longitude"] == 1.2
+    assert res_post_coord.json()[0]["latitude"] == "1.2"
+    assert res_post_coord.json()[0]["longitude"] == "1.2"
     assert res_post_coord.json()[0]["connection"] == "3g"
 
     time.sleep(1)
@@ -239,8 +239,8 @@ def test_create_waypoints_to_route_and_get_routes_waypoints():
         json=[
             {
                 "route_id": route_id,
-                "latitude": 1.3,
-                "longitude": 1.3,
+                "latitude": "1.3",
+                "longitude": "1.3",
                 "mnc": 200,
                 "connection": "4g",
             }
@@ -248,8 +248,8 @@ def test_create_waypoints_to_route_and_get_routes_waypoints():
     )
 
     assert res_post_coord.status_code == 200
-    assert res_post_coord.json()[0]["latitude"] == 1.3
-    assert res_post_coord.json()[0]["longitude"] == 1.3
+    assert res_post_coord.json()[0]["latitude"] == "1.3"
+    assert res_post_coord.json()[0]["longitude"] == "1.3"
     assert res_post_coord.json()[0]["connection"] == "4g"
 
     res_get_route_waypoints = client.get(
@@ -287,8 +287,8 @@ def test_waypoint_timestamp_can_be_given():
         json=[
             {
                 "route_id": route_id,
-                "latitude": 1.4,
-                "longitude": 1.4,
+                "latitude": "1.4",
+                "longitude": "1.4",
                 "mnc": 200,
                 "ts": ts,
                 "connection": "5g",
@@ -333,8 +333,8 @@ def test_null_connection_can_be_given():
         json=[
             {
                 "route_id": route_id,
-                "latitude": 1.5,
-                "longitude": 1.5,
+                "latitude": "1.5",
+                "longitude": "1.5",
                 "mnc": 200,
                 "ts": ts,
                 "connection": None,
@@ -361,8 +361,8 @@ def test_null_mnc_can_be_given():
         json=[
             {
                 "route_id": route_id,
-                "latitude": 1.6,
-                "longitude": 1.6,
+                "latitude": "1.6",
+                "longitude": "1.6",
                 "mnc": None,
                 "ts": ts,
                 "connection": "5g",
@@ -389,8 +389,8 @@ def test_no_connection_waypoint_can_be_given():
         json=[
             {
                 "route_id": route_id,
-                "latitude": 1.7,
-                "longitude": 1.7,
+                "latitude": "1.7",
+                "longitude": "1.7",
                 "mnc": None,
                 "ts": ts,
                 "connection": None,
@@ -422,11 +422,11 @@ def test_get_users_latest_routes_waypoints():
     assert len(waypoints) == 8
     assert is_active == True
 
-    assert waypoints[0]["latitude"] == 1.0
-    assert waypoints[0]["longitude"] == 1.0
+    assert waypoints[0]["latitude"] == "1.0"
+    assert waypoints[0]["longitude"] == "1.0"
 
-    assert waypoints[len(waypoints) - 1]["latitude"] == 1.7
-    assert waypoints[len(waypoints) - 1]["longitude"] == 1.7
+    assert waypoints[len(waypoints) - 1]["latitude"] == "1.7"
+    assert waypoints[len(waypoints) - 1]["longitude"] == "1.7"
 
 
 def test_delete_route():
