@@ -69,9 +69,9 @@ def get_users_latest_route(user_id: str, db: Session):
     waypoints = (
         db.query(models.Waypoint)
         .filter(models.Waypoint.route_id == latest_route_id)
+        .order_by(models.Waypoint.ts)
         .all()
     )
-
     return [latest_route_id, is_route_active, waypoints]
 
 

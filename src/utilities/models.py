@@ -35,6 +35,18 @@ class Route(Base):
 
 
 class Waypoint(Base):
+    def __str__(self):
+        return f"""
+            Waypoint(
+                route_id={self.route_id},
+                latitude={self.latitude},
+                longitude={self.longitude},
+                mnc={self.mnc},
+                ts={self.ts},
+                connection={self.connection}
+            )
+        """
+
     __tablename__ = "waypoints"
 
     route_id = Column(
