@@ -1,5 +1,5 @@
 """Module for defining database objects"""
-from sqlalchemy import Column, String, Integer, Boolean, Float, ForeignKey, DateTime
+from sqlalchemy import Column, String, Integer, Boolean, ForeignKey, DateTime
 from sqlalchemy.schema import PrimaryKeyConstraint
 from sqlalchemy.orm import relationship
 
