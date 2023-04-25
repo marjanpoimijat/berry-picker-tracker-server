@@ -37,7 +37,10 @@ def get_db():
 def get_nls_map(maptype: str, z, y, x):
     """Fetches specified maptiles via the NLS API"""
 
-    url = f"https://avoin-karttakuva.maanmittauslaitos.fi/avoin/wmts/1.0.0/{maptype}/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.png"
+    url = (
+        f"https://avoin-karttakuva.maanmittauslaitos.fi/avoin/wmts/1.0.0/"
+        f"{maptype}/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.png"
+    )
     response = requests.get(url, auth=(API_KEY, ""), stream=True)
     if response.status_code == 200:
         return Response(
