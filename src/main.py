@@ -1,10 +1,11 @@
-import requests
+"""Routing module"""
 import os
+from typing import List
+import requests
 from dotenv import load_dotenv
 from fastapi import FastAPI, Response, HTTPException, Depends, Header
 from fastapi.responses import RedirectResponse
 from mangum import Mangum
-from typing import List
 from sqlalchemy.orm import Session
 
 from service import crud
@@ -34,9 +35,9 @@ def get_db():
 
 
 def get_nls_map(maptype: str, z, y, x):
-    url = "https://avoin-karttakuva.maanmittauslaitos.fi/avoin/wmts/1.0.0/{maptype}/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.png".format(
-        maptype=maptype, z=z, y=y, x=x
-    )
+    """Fetches specified maptiles via the NLS API"""
+
+    url = f"https://avoin-karttakuva.maanmittauslaitos.fi/avoin/wmts/1.0.0/{maptype}/default/WGS84_Pseudo-Mercator/{z}/{y}/{x}.png"
     response = requests.get(url, auth=(API_KEY, ""), stream=True)
     if response.status_code == 200:
         return Response(
@@ -59,11 +60,10 @@ def get_status():
 
 # for testing purposes only
 @app.get("/osmapi/{z}/{y}/{x}")
-def get_nls_tile(z, y, x):
+def get_osm_tile(z, y, x):
+    """Fetches specified OpenStreet Map tile"""
     print("osmapi handler called")
-    url = "http://a.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png".format(
-        z=z, y=y, x=x
-    )
+    url = f"http://a.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png"
     print("url: ", url)
     response = requests.get(url, stream=True)
     print("response: ", response)
@@ -76,18 +76,21 @@ def get_nls_tile(z, y, x):
 
 @app.get("/nlstopographic/{z}/{y}/{x}")
 def get_nlsortographic_tile(z, y, x):
+    """Get topographic map tile from NLS"""
     response = get_nls_map("maastokartta", z, y, x)
     return response
 
 
 @app.get("/nlsplain/{z}/{y}/{x}")
 def get_nlsplain_tile(z, y, x):
+    """Get plain map tile from NLS"""
     response = get_nls_map("selkokartta", z, y, x)
     return response
 
 
 @app.get("/nlsaerial/{z}/{y}/{x}")
 def get_nlsaerial_tile(z, y, x):
+    """Get aerial map tile from NLS"""
     response = get_nls_map("ortokuva", z, y, x)
     return response
 
@@ -174,5 +177,6 @@ def delete_route(route_id: str = Header(), db: Session = Depends(get_db)):
 
 @app.get("/get-legend")
 def get_legend():
+    """Fetches map legend pdf from the NLS website"""
     print(LEGEND_URI)
     return RedirectResponse(LEGEND_URI)

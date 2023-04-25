@@ -1,3 +1,5 @@
+"""App tests"""
+import os
 import re
 import time
 from fastapi.testclient import TestClient
@@ -7,7 +9,6 @@ from sqlalchemy.orm import sessionmaker
 from utilities.db import Base
 from main import app, get_db
 
-import os
 
 TEST_DATABASE_URI = os.getenv("TEST_DATABASE_URI")
 
@@ -19,6 +20,7 @@ Base.metadata.create_all(bind=engine)
 
 
 def override_get_db():
+    """Test database configuration"""
     try:
         Base.metadata.create_all(bind=engine)
         db = TestingSessionLocal()
@@ -33,16 +35,19 @@ client = TestClient(app)
 
 
 def test_connecting_non_existing_url():
+    """Routing fails with wrong url"""
     res = client.get("/wrong_url")
     assert res.status_code == 404
 
 
 def test_connection_works():
+    """Routing works with correct url"""
     res = client.get("/")
     assert res.status_code == 200
 
 
 def test_create_and_get_users_with_generated_id():
+    """User creation without given id works correctly"""
     res1 = client.post("/new-user", json={})
     res2 = client.post("/new-user", json={})
 
@@ -63,6 +68,7 @@ def test_create_and_get_users_with_generated_id():
 
 
 def test_create_and_get_users_with_given_id():
+    """User creation with given id works correctly"""
     res1_post = client.post("/new-user", json={"id": "a1b2c3d4e5f6"})
     res2_post = client.post("/new-user", json={"id": "6f5e4d3c2b1a"})
 
@@ -83,6 +89,7 @@ def test_create_and_get_users_with_given_id():
 
 
 def test_create_route_for_user_with_generated_id_and_get_user():
+    """User route creation without given id works correctly"""
     res_post = client.post("/start-route", json={"user_id": "a1b2c3d4e5f6"})
 
     assert res_post.status_code == 200
@@ -95,6 +102,7 @@ def test_create_route_for_user_with_generated_id_and_get_user():
 
 
 def test_create_route_for_user_with_given_id_and_get_route():
+    """User route creation with given id works correctly"""
     res_post = client.post(
         "/start-route",
         json={
@@ -113,6 +121,7 @@ def test_create_route_for_user_with_given_id_and_get_route():
 
 
 def test_create_user_and_route_with_generated_id_and_id_is_in_nanoid_form():
+    """User and user route creation with given nanoid works correctly"""
     res_user = client.post("/new-user", json={})
 
     assert res_user.status_code == 200
@@ -135,12 +144,14 @@ def test_create_user_and_route_with_generated_id_and_id_is_in_nanoid_form():
 
 
 def test_create_route_with_non_existent_user():
+    """Route creation fails with non-existent user"""
     res_post = client.post("/start-route", json={"user_id": "safsafas"})
 
     assert res_post.status_code == 404
 
 
 def test_get_users_routes():
+    """User route fetching works correctly"""
     res_get = client.get("/get-user-routes", headers={"user-id": "a1b2c3d4e5f6"})
 
     assert res_get.status_code == 200
@@ -148,6 +159,7 @@ def test_get_users_routes():
 
 
 def test_deactivate_route():
+    """Route deactivation works correctly"""
     res_patch = client.patch(
         "/deactivate-route",
         headers={"route-id": "r1r2r3r4r5r6"},
@@ -160,10 +172,11 @@ def test_deactivate_route():
     res_get = client.get("/get-route", headers={"route-id": route_id})
 
     assert res_get.status_code == 200
-    assert res_get.json()[0]["active"] == False
+    assert res_get.json()[0]["active"] is False
 
 
 def test_create_waypoints_to_route_and_get_routes_waypoints():
+    """Waypoint creation works correctly"""
     res_post_route = client.post(
         "/start-route",
         json={
@@ -261,6 +274,7 @@ def test_create_waypoints_to_route_and_get_routes_waypoints():
 
 
 def test_get_routes_first_and_latest_waypoint():
+    """Get routes first and newest waypoints"""
     route_id = "6r5r4r3r2r1r"
     res_get_route_waypoints = client.get(
         "/get-route-waypoints", headers={"route-id": route_id}
@@ -279,8 +293,9 @@ def test_get_routes_first_and_latest_waypoint():
 
 
 def test_waypoint_timestamp_can_be_given():
+    """Waypoint timestamp fetching works correctly"""
     route_id = "6r5r4r3r2r1r"
-    ts = "2077-10-23T09:47:00"
+    timestamp = "2077-10-23T09:47:00"
 
     res_post_waypoint = client.post(
         "/create-waypoint",
@@ -290,7 +305,7 @@ def test_waypoint_timestamp_can_be_given():
                 "latitude": "1.4",
                 "longitude": "1.4",
                 "mnc": 200,
-                "ts": ts,
+                "ts": timestamp,
                 "connection": "5g",
             }
         ],
@@ -303,10 +318,11 @@ def test_waypoint_timestamp_can_be_given():
     )
 
     assert len(res_get_route_waypoints.json()) == 5
-    assert res_get_route_waypoints.json()[4]["ts"] == ts
+    assert res_get_route_waypoints.json()[4]["ts"] == timestamp
 
 
 def test_different_connection_types_are_in_database_entries():
+    """Network connection types are stored correctly"""
     route_id = "6r5r4r3r2r1r"
 
     res_get_route_waypoints = client.get(
@@ -325,8 +341,9 @@ def test_different_connection_types_are_in_database_entries():
 
 
 def test_null_connection_can_be_given():
+    """Network connection type null is stored correctly in the database"""
     route_id = "6r5r4r3r2r1r"
-    ts = "2777-10-23T09:47:00"
+    timestamp = "2777-10-23T09:47:00"
 
     res_post_waypoint = client.post(
         "/create-waypoint",
@@ -336,7 +353,7 @@ def test_null_connection_can_be_given():
                 "latitude": "1.5",
                 "longitude": "1.5",
                 "mnc": 200,
-                "ts": ts,
+                "ts": timestamp,
                 "connection": None,
             }
         ],
@@ -349,12 +366,13 @@ def test_null_connection_can_be_given():
     )
 
     assert res_get_route_waypoints.status_code == 200
-    assert res_get_route_waypoints.json()[5]["connection"] == None
+    assert res_get_route_waypoints.json()[5]["connection"] is None
 
 
 def test_null_mnc_can_be_given():
+    """The mobile network code is fetchable from database"""
     route_id = "6r5r4r3r2r1r"
-    ts = "2888-10-23T09:47:00"
+    timestamp = "2888-10-23T09:47:00"
 
     res_post_waypoint = client.post(
         "/create-waypoint",
@@ -364,7 +382,7 @@ def test_null_mnc_can_be_given():
                 "latitude": "1.6",
                 "longitude": "1.6",
                 "mnc": None,
-                "ts": ts,
+                "ts": timestamp,
                 "connection": "5g",
             }
         ],
@@ -377,12 +395,13 @@ def test_null_mnc_can_be_given():
     )
 
     assert res_get_route_waypoints.status_code == 200
-    assert res_get_route_waypoints.json()[6]["mnc"] == None
+    assert res_get_route_waypoints.json()[6]["mnc"] is None
 
 
 def test_no_connection_waypoint_can_be_given():
+    """Waypoint created while without network connection gets stored correctly"""
     route_id = "6r5r4r3r2r1r"
-    ts = "3077-10-23T09:47:00"
+    timestamp = "3077-10-23T09:47:00"
 
     res_post_waypoint = client.post(
         "/create-waypoint",
@@ -392,7 +411,7 @@ def test_no_connection_waypoint_can_be_given():
                 "latitude": "1.7",
                 "longitude": "1.7",
                 "mnc": None,
-                "ts": ts,
+                "ts": timestamp,
                 "connection": None,
             }
         ],
@@ -405,11 +424,12 @@ def test_no_connection_waypoint_can_be_given():
     )
 
     assert res_get_route_waypoints.status_code == 200
-    assert res_get_route_waypoints.json()[7]["mnc"] == None
-    assert res_get_route_waypoints.json()[7]["connection"] == None
+    assert res_get_route_waypoints.json()[7]["mnc"] is None
+    assert res_get_route_waypoints.json()[7]["connection"] is None
 
 
 def test_get_users_latest_routes_waypoints():
+    """Waypoints from the user's latest route are fetchable"""
     user_id = "a1b2c3d4e5f6"
 
     res_waypoints = client.get("/get-users-latest-route/", headers={"user-id": user_id})
@@ -420,7 +440,7 @@ def test_get_users_latest_routes_waypoints():
     waypoints = res_waypoints.json()[2]
 
     assert len(waypoints) == 8
-    assert is_active == True
+    assert is_active is True
 
     assert waypoints[0]["latitude"] == "1.0"
     assert waypoints[0]["longitude"] == "1.0"
@@ -430,6 +450,7 @@ def test_get_users_latest_routes_waypoints():
 
 
 def test_delete_route():
+    "Route deletion works correctly"
     route_id = "6r5r4r3r2r1r"
     res_get_route = client.get("/get-route", headers={"route-id": route_id})
 
@@ -448,6 +469,7 @@ def test_delete_route():
 
 
 def test_no_latest_route_found_on_non_existent_user():
+    """Non-existent user has no routes"""
     res_waypoints = client.get(
         "/get-users-latest-route", headers={"user-id": "111111111111"}
     )
@@ -459,6 +481,7 @@ def test_no_latest_route_found_on_non_existent_user():
 
 
 def test_no_latest_route_found_on_user_with_no_routes():
+    """No routes are returned if user has no routes in database"""
     user_id = "a1a1a1a1a1a1"
     res_new_user = client.post("/new-user", json={"id": user_id})
 
@@ -474,6 +497,7 @@ def test_no_latest_route_found_on_user_with_no_routes():
 
 
 def test_delete_user():
+    """User deletion works"""
     user_id = "a1b2c3d4e5f6"
     res_get_user = client.get("/get-user", headers={"user-id": user_id})
 

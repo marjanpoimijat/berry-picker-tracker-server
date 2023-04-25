@@ -1,14 +1,13 @@
+"Module for handling data validation"
 from datetime import datetime
 from typing import List, Optional
 from pydantic import BaseModel, Field
 from nanoid import generate
 
 
-# This file is basically just for data validation
-
-
 def get_nanoid():
-    """Generate nanoid as a string, first argument for generate function are used symbols and second one is the lenght of the id"""
+    """Generate nanoid as a string, first argument for generate function are
+    used symbols and second one is the lenght of the id"""
     return str(
         generate("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", 12)
     )
@@ -31,14 +30,17 @@ class WaypointBase(BaseModel):
 
 
 class WaypointCreate(WaypointBase):
-    # Creating waypoints does not need additional data
+    """Creating waypoints does not need additional data"""
+
     pass
 
 
 class Waypoint(WaypointBase):
-    """Attributes (addition to WaypointteBase) that are seen when reading data"""
+    """Attributes (addition to WaypointBase) that are seen when reading data"""
 
     class Config:
+        """Waypoint object config"""
+
         orm_mode = True
         arbitrary_types_allowed = True
 
@@ -52,7 +54,8 @@ class RouteBase(BaseModel):
 
 
 class RouteCreate(RouteBase):
-    # Creating routes does not need additional data
+    """Creating routes does not need additional data"""
+
     pass
 
 
@@ -73,7 +76,8 @@ class UserBase(BaseModel):
 
 
 class UserCreate(UserBase):
-    # Creating user does not need additional data
+    """Creating user does not need additional data"""
+
     pass
 
 
@@ -83,5 +87,7 @@ class User(UserBase):
     routes: List[Route] = []
 
     class Config:
+        """User class configs"""
+
         orm_mode = True
         arbitrary_types_allowed = True
