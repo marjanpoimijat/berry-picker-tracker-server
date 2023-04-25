@@ -65,6 +65,7 @@ class Route(RouteBase):
     waypoints: List[Waypoint] = []
 
     class Config:
+        "Route object configs"
         orm_mode = True
         arbitrary_types_allowed = True
 

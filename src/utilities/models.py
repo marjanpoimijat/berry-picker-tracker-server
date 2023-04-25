@@ -38,8 +38,9 @@ class Route(Base):
 
 
 class Waypoint(Base):
+    """Database waypoint object"""
+
     def __str__(self):
-        """Database waypoint object"""
         return f"""
             Waypoint(
                 route_id={self.route_id},
