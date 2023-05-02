@@ -61,7 +61,7 @@ def get_status():
     return {"subject": "staging status", "status": "OK", "color": "green"}
 
 
-# for testing purposes only
+# for development/testing purposes only! This is not supposed to be used for this.
 @app.get("/osmapi/{z}/{y}/{x}")
 def get_osm_tile(z, y, x):
     """Fetches specified OpenStreet Map tile"""
